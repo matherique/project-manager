@@ -27,14 +27,14 @@ project config edit
 Open the editor configured in `project config` to create the tmux
 script to open setup the project.
 
-The <name> is the name of the project
+* `<name>` is the name of the project
 
 ## `project edit <name>`
 
 Open the bash script that contains all the tmux code to setup the
 project.
 
-The <name> is the name of the project
+* `<name>` is the name of the project
 
 ## `project open`
 
@@ -42,17 +42,20 @@ Execute the bash script to run all tmux code
 
 ## `project config`
 
-List all the configs setup
+List all the config setup
 
 ## `project config <key>`
 
 List the value in the config
 
-<key> is the name of the config that you looking for
+* `<key>` is the name of the config that you looking for
 
 ## `project config <key> <value>`
 
 Set the value to the config key
+
+* `<key>` is the name of the config that you looking for
+* `<value>` is the value to set
 
 ## `project config edit`
 
