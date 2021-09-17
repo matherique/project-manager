@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"matherique/project-manager/pkg/config"
+	"github.com/matherique/project-manager/pkg/config"
 	"os"
 	"os/exec"
 

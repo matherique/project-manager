@@ -1,3 +1,3 @@
-module matherique/project-manager
+module github.com/matherique/project-manager
 
 go 1.16
