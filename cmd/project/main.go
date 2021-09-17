@@ -3,12 +3,20 @@ package main
 import (
 	"fmt"
 	"log"
+	"matherique/project-manager/pkg/config"
 	"os"
 	"os/exec"
+
 )
 
 func main() {
+  f := "config"
 
+  c := config.Get(f)
+
+  fmt.Println(c)
+
+  /*
 	if len(os.Args) < 2 {
 		fmt.Println("subcommands: create")
 		return
@@ -20,6 +28,8 @@ func main() {
 	default:
 		fmt.Println("subcommand not found, try: create|edit|config")
 	}
+
+  */
 }
 
 func create(args []string) {
