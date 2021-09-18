@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
+
+	"github.com/matherique/project-manager/pkg/create"
 )
 
 type Teste struct {
@@ -21,7 +22,6 @@ func main() {
 
   defer f.Close()
 
-  /*
 	if len(os.Args) < 2 {
 		fmt.Println("subcommands: create")
 		return
@@ -29,10 +29,9 @@ func main() {
 
 	switch os.Args[1] {
 	case "create":
-		create(os.Args[2:])
+		create.Execute(os.Args[2:])
 	default:
 		fmt.Println("subcommand not found, try: create|edit|config")
 	}
 
-  */
 }
