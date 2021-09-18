@@ -2,10 +2,9 @@ package config
 
 import (
 	"bufio"
-	"log"
-	"os"
-	"strings"
-	"time"
+	"fmt"
+	"io"
+	"regexp"
 )
 
 // Parse config file and get all the config data
@@ -13,53 +12,36 @@ import (
 // Possible configs:
 //   - editor: editor used to open the script file and edit it
 //   - scripts: folder to store all scripts
-//   - updated: datetime from last update
 
 type config struct {
-  editor string
-  scripts string
-  updated time.Time
+  config map[string]string
 }
 
-func Get(filepath string) *config {
-  f, err := os.Open(filepath)
-
-  if err != nil {
-    log.Fatalf("erro while open config file: %v", err)
-  }
+func (c *config) Get(key string) (string, error) {
+  v, ok := c.config[key]
   
-  defer f.Close()
+  if !ok {
+    return "", fmt.Errorf("key not found")
+  }
 
-  s := bufio.NewScanner(f)
+  return v, nil
+}
+
+// Receive io.Reader and return a new config instance
+func New(r io.Reader) *config {
+  s := bufio.NewScanner(r)
 
   d := make(map[string]string)
 
   for s.Scan() {
-    line := strings.Split(s.Text(), "=")
-    k := line[0]
-    d[k] = line[1]
-  }
-  
-  c := config{}
-
-  if _, ok := d["editor"]; ok {
-    c.editor = d["editor"]
-  }
-
-  if _, ok := d["scripts"]; ok {
-    c.scripts = d["scripts"]
-  }
-
-  if _, ok := d["updated"]; ok {
-    time, err := time.Parse(time.RFC3339, d["updated"]);
-
-    if err != nil {
-      log.Fatalf("could not parse 'updated' time %v", err)
-      return &c
+    re := regexp.MustCompile(`^(.*)=(.*)$`)
+    res := re.FindStringSubmatch(s.Text())
+    if len(res) == 0 || len(res) < 3 {
+      continue
     }
 
-    c.updated = time
+    d[res[1]] = res[2] 
   }
-
-  return &c
+  
+  return &config{ config: d }
 }

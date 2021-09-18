@@ -3,18 +3,23 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/matherique/project-manager/pkg/config"
 	"os"
 	"os/exec"
-
 )
 
+type Teste struct {
+  Editor string
+  Scripts string
+}
+
 func main() {
-  f := "config"
+  f, err := os.Open("config")
 
-  c := config.Get(f)
+  if err != nil {
+    log.Fatal(err)
+  }
 
-  fmt.Println(c)
+  defer f.Close()
 
   /*
 	if len(os.Args) < 2 {
@@ -30,37 +35,4 @@ func main() {
 	}
 
   */
-}
-
-func create(args []string) {
-	if len(args) == 0 {
-		fmt.Println("missing project name")
-		os.Exit(0)
-	}
-
-	c := []byte("#!/bin/bash\n\n")
-	n := args[0]
-
-	err := os.WriteFile(n, c, 0644)
-
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
-
-	p, _ := exec.LookPath("vi")
-
-	cmd := &exec.Cmd{
-		Path:   p,
-		Args:   []string{p, n},
-		Stdout: os.Stdout,
-		Stdin:  os.Stdin,
-	}
-
-	err = cmd.Run()
-
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
 }

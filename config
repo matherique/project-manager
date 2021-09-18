@@ -1,3 +1,2 @@
-editor=vi
-scripts=/home/matherique/.config/project/scripts
-updated=2014-11-12T11:45:26.371Z
+editor={{.Editor}}
+scripts={{.Scripts}}
