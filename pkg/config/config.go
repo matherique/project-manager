@@ -1,32 +1,71 @@
 package config
 
 import (
-	"bufio"
-	"fmt"
 	"io"
-	"regexp"
 )
 
-// Parse config file and get all the config data
-//
-// Possible configs:
-//   - editor: editor used to open the script file and edit it
-//   - scripts: folder to store all scripts
+type Getter interface {
+  Get(key string) string
+}
+
+type Setter interface {
+  Set(key, value string) error
+}
+
+type Saver interface {
+  Save() error
+}
+
+type Reader interface {
+  Read(r io.Reader) error 
+}
+
+type Loader interface {
+  Load() error 
+}
+
+type Config interface {
+  Getter
+  Setter
+  Saver
+  Reader
+  Loader
+}
 
 type config struct {
-  config map[string]string
+  m map[string]string
 }
 
-func (c *config) Get(key string) (string, error) {
-  v, ok := c.config[key]
-  
-  if !ok {
-    return "", fmt.Errorf("key not found")
+func NewConfig(r io.Reader) (*config, error) {
+  m := make(map[string]string)
+  c := new(config)
+  c.m = m
+
+  err := c.Read(r)
+
+  if err != nil {
+    return nil, err
   }
 
-  return v, nil
+  return c, nil
 }
 
+func (c *config) Get(key string) string {
+  v, ok := c.m[key]
+
+  if !ok {
+    return ""
+  }
+
+  return v
+}
+
+func (c *config) Set(key, value string) error { return nil }
+func (c *config) Save() error { return nil }
+func (c *config) Read(r io.Reader) error { return nil }
+func (c *config) Load() error  { return nil }
+
+/*
 // Receive io.Reader and return a new config instance
 func New(r io.Reader) *config {
   s := bufio.NewScanner(r)
@@ -43,5 +82,6 @@ func New(r io.Reader) *config {
     d[res[1]] = res[2] 
   }
   
-  return &config{ config: d }
+  return &config{ m: d }
 }
+*/
