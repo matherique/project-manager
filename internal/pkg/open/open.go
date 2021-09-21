@@ -4,7 +4,7 @@ import (
 	"log"
 	"path"
 
-	"github.com/matherique/project-manager/internal/pkg/config"
+	"github.com/matherique/project-manager/pkg/config"
 )
 
 type open struct {
