@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/matherique/project-manager/pkg/config"
-	"github.com/matherique/project-manager/pkg/create"
+	"github.com/matherique/project-manager/internal/pkg/create"
 )
 
 type Teste struct {
@@ -15,7 +15,6 @@ type Teste struct {
 }
 
 func main() {
-
   c, err := config.NewConfig("config")
 
   if err != nil {
