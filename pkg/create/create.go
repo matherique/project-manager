@@ -31,6 +31,7 @@ func (c *create) Exec(a []string) {
 	if len(a) == 0 {
 		log.Fatalf("missing project name")
 	}
+
   c.c.Load()
 
   fn := a[0]
@@ -64,8 +65,6 @@ func (c *create) Exec(a []string) {
 		Stdout: os.Stdout,
 		Stdin:  os.Stdin,
 	}
-
-  log.Println([]string{p, fn})
 
   err = cmd.Run()
 

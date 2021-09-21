@@ -1,7 +1,11 @@
 package config
 
 import (
+	"bufio"
+	"fmt"
 	"io"
+	"os"
+	"regexp"
 )
 
 type Getter interface {
@@ -9,39 +13,42 @@ type Getter interface {
 }
 
 type Setter interface {
-  Set(key, value string) error
+  Set(key, value string)
 }
 
 type Saver interface {
   Save() error
 }
 
-type Reader interface {
-  Read(r io.Reader) error 
+type Loader interface {
+  Load() 
 }
 
-type Loader interface {
-  Load() error 
+type Reader interface {
+  Read() error 
 }
 
 type Config interface {
   Getter
   Setter
   Saver
-  Reader
   Loader
+  Reader
+  parse(r io.Reader)
 }
 
 type config struct {
+  f string
   m map[string]string
 }
 
-func NewConfig(r io.Reader) (*config, error) {
+func NewConfig(f string) (*config, error) {
   m := make(map[string]string)
   c := new(config)
   c.m = m
+  c.f = f
 
-  err := c.Read(r)
+  err := c.Read()
 
   if err != nil {
     return nil, err
@@ -60,28 +67,63 @@ func (c *config) Get(key string) string {
   return v
 }
 
-func (c *config) Set(key, value string) error { return nil }
-func (c *config) Save() error { return nil }
-func (c *config) Read(r io.Reader) error { return nil }
-func (c *config) Load() error  { return nil }
+func (c *config) Set(key, value string) { 
+  c.m[key] = value
+}
 
-/*
-// Receive io.Reader and return a new config instance
-func New(r io.Reader) *config {
+func (c *config) Save() error {
+  return nil 
+}
+
+func (c *config) Load() {
+  f := c.ConfigFile()
+  r, _ := os.Open(f)
+
+  defer r.Close()
+
+  c.parse(r)
+}
+
+func (c *config) Read() error { 
+  f := c.ConfigFile()
+
+  r, err := os.Open(f)
+  
+  if err != nil {
+    return fmt.Errorf("could not open file %v", err)
+  }
+
+  defer r.Close()
+
+  c.parse(r)
+
+  return nil
+}
+
+func (c *config) parse(r io.Reader) { 
   s := bufio.NewScanner(r)
 
-  d := make(map[string]string)
+  c.m = make(map[string]string)
 
   for s.Scan() {
     re := regexp.MustCompile(`^(.*)=(.*)$`)
     res := re.FindStringSubmatch(s.Text())
+
     if len(res) == 0 || len(res) < 3 {
       continue
     }
 
-    d[res[1]] = res[2] 
+    c.m[res[1]] = res[2] 
   }
   
-  return &config{ m: d }
 }
-*/
+
+func (c *config) ConfigFile() string { 
+  if c.f == "" {
+    // TODO: get config path
+    return "config"
+  }
+
+  return c.f
+}
+
