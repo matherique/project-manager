@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/matherique/project-manager/pkg/config"
 	"github.com/matherique/project-manager/pkg/create"
 )
 
@@ -14,22 +15,23 @@ type Teste struct {
 }
 
 func main() {
-  f, err := os.Open("config")
+
+  c, err := config.NewConfig("config")
 
   if err != nil {
-    log.Fatal(err)
+    log.Fatalf("could not load config file: %v", err)
   }
-
-  defer f.Close()
 
 	if len(os.Args) < 2 {
 		fmt.Println("subcommands: create")
 		return
 	}
 
+  crt := create.NewCreate(c)
+
 	switch os.Args[1] {
 	case "create":
-		create.Execute(os.Args[2:])
+		crt.Exec(os.Args[2:])
 	default:
 		fmt.Println("subcommand not found, try: create|edit|config")
 	}
