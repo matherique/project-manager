@@ -9,10 +9,10 @@ func Exec(c string, args ...string) error {
 	p, err := exec.LookPath(c)
 
 	if err != nil {
-    return err
+		return err
 	}
 
-  a := append([]string{c}, args...)
+	a := append([]string{c}, args...)
 
 	cmd := &exec.Cmd{
 		Path:   p,
@@ -21,11 +21,11 @@ func Exec(c string, args ...string) error {
 		Stdin:  os.Stdin,
 	}
 
-  err = cmd.Run()
+	err = cmd.Run()
 
 	if err != nil {
-    return err
+		return err
 	}
 
-  return nil
+	return nil
 }

@@ -9,121 +9,120 @@ import (
 )
 
 type Getter interface {
-  Get(key string) string
+	Get(key string) string
 }
 
 type Setter interface {
-  Set(key, value string)
+	Set(key, value string)
 }
 
 type Saver interface {
-  Save() error
+	Save() error
 }
 
 type Loader interface {
-  Load() 
+	Load()
 }
 
 type Reader interface {
-  Read() error 
+	Read() error
 }
 
 type Config interface {
-  Getter
-  Setter
-  Saver
-  Loader
-  Reader
-  parse(r io.Reader)
+	Getter
+	Setter
+	Saver
+	Loader
+	Reader
+	parse(r io.Reader)
 }
 
 type config struct {
-  f string
-  m map[string]string
+	f string
+	m map[string]string
 }
 
 func NewConfig(f string) (*config, error) {
-  m := make(map[string]string)
-  c := new(config)
-  c.m = m
-  c.f = f
+	m := make(map[string]string)
+	c := new(config)
+	c.m = m
+	c.f = f
 
-  err := c.Read()
+	err := c.Read()
 
-  if err != nil {
-    return nil, err
-  }
+	if err != nil {
+		return nil, err
+	}
 
-  return c, nil
+	return c, nil
 }
 
 func (c *config) Get(key string) string {
-  v, ok := c.m[key]
+	v, ok := c.m[key]
 
-  if !ok {
-    return ""
-  }
+	if !ok {
+		return ""
+	}
 
-  return v
+	return v
 }
 
-func (c *config) Set(key, value string) { 
-  c.m[key] = value
+func (c *config) Set(key, value string) {
+	c.m[key] = value
 }
 
 func (c *config) Save() error {
-  return nil 
+	return nil
 }
 
 func (c *config) Load() {
-  f := c.ConfigFile()
-  r, _ := os.Open(f)
+	f := c.ConfigFile()
+	r, _ := os.Open(f)
 
-  defer r.Close()
+	defer r.Close()
 
-  c.parse(r)
+	c.parse(r)
 }
 
-func (c *config) Read() error { 
-  f := c.ConfigFile()
+func (c *config) Read() error {
+	f := c.ConfigFile()
 
-  r, err := os.Open(f)
-  
-  if err != nil {
-    return fmt.Errorf("could not open file %v", err)
-  }
+	r, err := os.Open(f)
 
-  defer r.Close()
+	if err != nil {
+		return fmt.Errorf("could not open file %v", err)
+	}
 
-  c.parse(r)
+	defer r.Close()
 
-  return nil
+	c.parse(r)
+
+	return nil
 }
 
-func (c *config) parse(r io.Reader) { 
-  s := bufio.NewScanner(r)
+func (c *config) parse(r io.Reader) {
+	s := bufio.NewScanner(r)
 
-  c.m = make(map[string]string)
+	c.m = make(map[string]string)
 
-  for s.Scan() {
-    re := regexp.MustCompile(`^(.*)=(.*)$`)
-    res := re.FindStringSubmatch(s.Text())
+	for s.Scan() {
+		re := regexp.MustCompile(`^(.*)=(.*)$`)
+		res := re.FindStringSubmatch(s.Text())
 
-    if len(res) == 0 || len(res) < 3 {
-      continue
-    }
+		if len(res) == 0 || len(res) < 3 {
+			continue
+		}
 
-    c.m[res[1]] = res[2] 
-  }
-  
+		c.m[res[1]] = res[2]
+	}
+
 }
 
-func (c *config) ConfigFile() string { 
-  if c.f == "" {
-    // TODO: get config path
-    return "config"
-  }
+func (c *config) ConfigFile() string {
+	if c.f == "" {
+		// TODO: get config path
+		return "config"
+	}
 
-  return c.f
+	return c.f
 }
-

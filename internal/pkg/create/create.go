@@ -18,13 +18,13 @@ tmux new-session -s $project
 `
 
 type create struct {
-  c config.Config
+	c config.Config
 }
 
 func NewCreate(c config.Config) *create {
-  ct := new(create)
-  ct.c = c
-  return ct
+	ct := new(create)
+	ct.c = c
+	return ct
 }
 
 func (c *create) Exec(a []string) {
@@ -32,37 +32,36 @@ func (c *create) Exec(a []string) {
 		log.Fatalf("missing project name")
 	}
 
-  c.c.Load()
+	c.c.Load()
 
-  fn := a[0]
-  fp := path.Join(c.c.Get("scripts"), fn)
-  f, err := os.Create(fp)
+	fn := a[0]
+	fp := path.Join(c.c.Get("scripts"), fn)
+	f, err := os.Create(fp)
 
 	if err != nil {
-    log.Fatalf("could not create file: %v", err)
+		log.Fatalf("could not create file: %v", err)
 	}
 
-  t := template.Must(template.New("project").Parse(tpl))
-  
-  err = t.Execute(f, fn)
+	t := template.Must(template.New("project").Parse(tpl))
+
+	err = t.Execute(f, fn)
 
 	if err != nil {
-    log.Fatalf("could not save template file: %v", err)
+		log.Fatalf("could not save template file: %v", err)
 	}
 
-  err = os.Chmod(fn, 0777)
+	err = os.Chmod(fn, 0777)
 
 	if err != nil {
-    log.Fatalf("could not save template file: %v", err)
+		log.Fatalf("could not save template file: %v", err)
 	}
 
-  edt := c.c.Get("editor")
+	edt := c.c.Get("editor")
 
-  err = cmd.Exec(edt, fp)
+	err = cmd.Exec(edt, fp)
 
 	if err != nil {
-    log.Fatalf("could not run the command: %v", err)
+		log.Fatalf("could not run the command: %v", err)
 	}
 
 }
-
