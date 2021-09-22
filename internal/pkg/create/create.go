@@ -4,9 +4,9 @@ import (
 	"html/template"
 	"log"
 	"os"
-	"os/exec"
 	"path"
 
+	"github.com/matherique/project-manager/pkg/cmd"
 	"github.com/matherique/project-manager/pkg/config"
 )
 
@@ -57,16 +57,8 @@ func (c *create) Exec(a []string) {
 	}
 
   edt := c.c.Get("editor")
-	p, _ := exec.LookPath(edt)
 
-	cmd := &exec.Cmd{
-		Path:   p,
-		Args:   []string{p, fn},
-		Stdout: os.Stdout,
-		Stdin:  os.Stdin,
-	}
-
-  err = cmd.Run()
+  err = cmd.Exec(edt, fp)
 
 	if err != nil {
     log.Fatalf("could not run the command: %v", err)

@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/matherique/project-manager/pkg/config"
 	"github.com/matherique/project-manager/internal/pkg/create"
+	"github.com/matherique/project-manager/internal/pkg/open"
+	"github.com/matherique/project-manager/pkg/config"
 )
 
 type Teste struct {
@@ -27,12 +28,15 @@ func main() {
 	}
 
   crt := create.NewCreate(c)
+  op := open.NewOpen(c)
 
 	switch os.Args[1] {
 	case "create":
 		crt.Exec(os.Args[2:])
+	case "open":
+	  op.Exec(os.Args[2:])
 	default:
-		fmt.Println("subcommand not found, try: create|edit|config")
+		fmt.Println("subcommand not found, try: create|open|edit|config")
 	}
 
 }
