@@ -1,6 +1,6 @@
-# Project manager
+# 🗃️ Project manager
 
-A project manager that setup all my environment
+> A project manager that setup all my environment
 
 ## Motivation
 
