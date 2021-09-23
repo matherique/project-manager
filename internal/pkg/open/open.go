@@ -2,10 +2,9 @@ package open
 
 import (
 	"log"
-	"os"
-	"os/exec"
 	"path"
 
+	"github.com/matherique/project-manager/pkg/cmd"
 	"github.com/matherique/project-manager/pkg/config"
 )
 
@@ -28,4 +27,9 @@ func (o *open) Exec(a []string) {
 	sp := o.c.Get("scripts")
 	fp := path.Join(sp, a[0])
 
+	err := cmd.Exec(fp)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
