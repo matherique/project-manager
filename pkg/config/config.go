@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"regexp"
+	"strings"
 )
 
 type Getter interface {
@@ -64,7 +65,7 @@ func (c *config) Get(key string) string {
 		return ""
 	}
 
-	return v
+	return strings.Trim(v, "\"")
 }
 
 func (c *config) Set(key, value string) {
