@@ -36,6 +36,7 @@ type Config interface {
 	Loader
 	Reader
 	parse(r io.Reader)
+	All() string
 }
 
 type config struct {
@@ -117,6 +118,16 @@ func (c *config) parse(r io.Reader) {
 		c.m[res[1]] = res[2]
 	}
 
+}
+
+func (c *config) All() string {
+	var all []string
+
+	for k, v := range c.m {
+		all = append(all, fmt.Sprintf("%s=%s", k, v))
+	}
+
+	return strings.Join(all, "\n")
 }
 
 func (c *config) ConfigFile() string {
