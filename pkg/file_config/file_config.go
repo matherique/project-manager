@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -29,24 +30,29 @@ type Reader interface {
 	Read() error
 }
 
-type Config interface {
+type Editer interface {
+	Edit() string
+}
+
+type FileConfig interface {
 	Getter
 	Setter
 	Saver
 	Loader
 	Reader
+	Editer
 	parse(r io.Reader)
 	All() string
 }
 
-type config struct {
+type fileConfig struct {
 	f string
 	m map[string]string
 }
 
-func NewConfig(f string) (*config, error) {
+func NewConfig(f string) (*fileConfig, error) {
 	m := make(map[string]string)
-	c := new(config)
+	c := new(fileConfig)
 	c.m = m
 	c.f = f
 
@@ -59,7 +65,7 @@ func NewConfig(f string) (*config, error) {
 	return c, nil
 }
 
-func (c *config) Get(key string) string {
+func (c *fileConfig) Get(key string) string {
 	v, ok := c.m[key]
 
 	if !ok {
@@ -69,15 +75,15 @@ func (c *config) Get(key string) string {
 	return strings.Trim(v, "\"")
 }
 
-func (c *config) Set(key, value string) {
+func (c *fileConfig) Set(key, value string) {
 	c.m[key] = value
 }
 
-func (c *config) Save() error {
+func (c *fileConfig) Save() error {
 	return nil
 }
 
-func (c *config) Load() {
+func (c *fileConfig) Load() {
 	f := c.ConfigFile()
 	r, _ := os.Open(f)
 
@@ -86,7 +92,17 @@ func (c *config) Load() {
 	c.parse(r)
 }
 
-func (c *config) Read() error {
+func (c *fileConfig) Edit() string {
+	fp, err := filepath.Abs(c.f)
+
+	if err != nil {
+		return ""
+	}
+
+	return fp
+}
+
+func (c *fileConfig) Read() error {
 	f := c.ConfigFile()
 
 	r, err := os.Open(f)
@@ -102,7 +118,7 @@ func (c *config) Read() error {
 	return nil
 }
 
-func (c *config) parse(r io.Reader) {
+func (c *fileConfig) parse(r io.Reader) {
 	s := bufio.NewScanner(r)
 
 	c.m = make(map[string]string)
@@ -120,7 +136,7 @@ func (c *config) parse(r io.Reader) {
 
 }
 
-func (c *config) All() string {
+func (c *fileConfig) All() string {
 	var all []string
 
 	for k, v := range c.m {
@@ -130,7 +146,7 @@ func (c *config) All() string {
 	return strings.Join(all, "\n")
 }
 
-func (c *config) ConfigFile() string {
+func (c *fileConfig) ConfigFile() string {
 	if c.f == "" {
 		// TODO: get config path
 		return "config"

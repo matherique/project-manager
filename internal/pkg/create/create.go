@@ -7,7 +7,7 @@ import (
 	"path"
 
 	"github.com/matherique/project-manager/pkg/cmd"
-	"github.com/matherique/project-manager/pkg/config"
+	fc "github.com/matherique/project-manager/pkg/file_config"
 )
 
 const tpl = `#!/bin/bash
@@ -18,10 +18,10 @@ tmux new-session -s $project
 `
 
 type create struct {
-	c config.Config
+	c fc.FileConfig
 }
 
-func NewCreate(c config.Config) *create {
+func NewCreate(c fc.FileConfig) *create {
 	ct := new(create)
 	ct.c = c
 	return ct

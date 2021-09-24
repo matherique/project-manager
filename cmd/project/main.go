@@ -8,7 +8,7 @@ import (
 	"github.com/matherique/project-manager/internal/pkg/config"
 	"github.com/matherique/project-manager/internal/pkg/create"
 	"github.com/matherique/project-manager/internal/pkg/open"
-	cnf "github.com/matherique/project-manager/pkg/config"
+	fc "github.com/matherique/project-manager/pkg/file_config"
 )
 
 type Teste struct {
@@ -17,7 +17,7 @@ type Teste struct {
 }
 
 func main() {
-	c, err := cnf.NewConfig("config")
+	c, err := fc.NewConfig("config")
 
 	if err != nil {
 		log.Fatalf("could not load config file: %v", err)
@@ -36,7 +36,7 @@ func main() {
 
 	crt := create.NewCreate(c)
 	op := open.NewOpen(c)
-	cnfg := config.NewConfig(c)
+	cfg := config.NewConfig(c)
 
 	switch os.Args[1] {
 	case "create":
@@ -44,7 +44,7 @@ func main() {
 	case "open":
 		op.Exec(os.Args[2:])
 	case "config":
-		cnfg.Exec(os.Args[2:])
+		cfg.Exec(os.Args[2:])
 	default:
 		fmt.Println("subcommand not found, try: create|open|edit|config")
 	}

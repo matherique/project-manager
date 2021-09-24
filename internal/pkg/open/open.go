@@ -5,14 +5,14 @@ import (
 	"path"
 
 	"github.com/matherique/project-manager/pkg/cmd"
-	"github.com/matherique/project-manager/pkg/config"
+	fc "github.com/matherique/project-manager/pkg/file_config"
 )
 
 type open struct {
-	c config.Config
+	c fc.FileConfig
 }
 
-func NewOpen(c config.Config) *open {
+func NewOpen(c fc.FileConfig) *open {
 	o := new(open)
 	o.c = c
 	return o

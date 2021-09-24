@@ -1,2 +1,2 @@
-editor={{.Editor}}
-scripts={{.Scripts}}
+editor=vi
+scripts="/home/matherique/personal/project-manager"
