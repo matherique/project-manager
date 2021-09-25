@@ -1,8 +1,8 @@
 package create
 
 import (
+	"fmt"
 	"html/template"
-	"log"
 	"os"
 	"path"
 
@@ -27,19 +27,19 @@ func NewCreate(c fc.FileConfig) *create {
 	return ct
 }
 
-func (c *create) Exec(a []string) {
-	if len(a) == 0 {
-		log.Fatalf("missing project name")
-	}
-
+func (c *create) Exec(a []string) error {
 	c.c.Load()
+
+	if len(a) == 0 {
+		return fmt.Errorf("missing project name")
+	}
 
 	fn := a[0]
 	fp := path.Join(c.c.Get("scripts"), fn)
 	f, err := os.Create(fp)
 
 	if err != nil {
-		log.Fatalf("could not create file: %v", err)
+		return fmt.Errorf("could not create file: %v", err)
 	}
 
 	t := template.Must(template.New("project").Parse(tpl))
@@ -47,21 +47,20 @@ func (c *create) Exec(a []string) {
 	err = t.Execute(f, fn)
 
 	if err != nil {
-		log.Fatalf("could not save template file: %v", err)
+		return fmt.Errorf("could not save template file: %v", err)
 	}
 
 	err = os.Chmod(fn, 0777)
 
 	if err != nil {
-		log.Fatalf("could not save template file: %v", err)
+		return fmt.Errorf("could not save template file: %v", err)
 	}
 
 	edt := c.c.Get("editor")
 
-	err = cmd.Exec(edt, fp)
+	return cmd.Exec(edt, fp)
+}
 
-	if err != nil {
-		log.Fatalf("could not run the command: %v", err)
-	}
-
+func (c *create) CreateFile() error {
+	return nil
 }

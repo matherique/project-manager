@@ -40,7 +40,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "create":
-		crt.Exec(os.Args[2:])
+		err = crt.Exec(os.Args[2:])
 	case "open":
 		err = op.Exec(os.Args[2:])
 	case "config":
