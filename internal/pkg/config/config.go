@@ -25,14 +25,32 @@ func (c *config) Exec(a []string) {
 		return
 	}
 
-	if len(a) == 1 && a[0] == "edit" {
-		cmd.Exec(c.c.Get("editor"), c.c.Edit())
-		return
+	if len(a) == 1 {
+		if a[0] == "edit" {
+		}
+
+		if c.c.HasKey(a[0]) {
+			fmt.Println(c.c.Get(a[0]))
+			return
+		}
 	}
+
 }
 
 func (c *config) GetAll() string {
 	c.c.Load()
 
 	return c.c.All()
+}
+
+func (c *config) Edit() {
+
+	cf := c.c.FilePath()
+
+	if cf == "" {
+		fmt.Println("config file not found")
+		os.Exit(1)
+	}
+
+	cmd.Exec(c.c.Get("editor"), cf)
 }
