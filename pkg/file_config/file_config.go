@@ -30,8 +30,8 @@ type Reader interface {
 	Read() error
 }
 
-type Editer interface {
-	Edit() string
+type FilePather interface {
+	FilePath() string
 }
 
 type FileConfig interface {
@@ -40,9 +40,12 @@ type FileConfig interface {
 	Saver
 	Loader
 	Reader
-	Editer
+	FilePather
 	parse(r io.Reader)
 	All() string
+	HasKey(k string) bool
+	Keys() []string
+	Values() []string
 }
 
 type fileConfig struct {
@@ -63,6 +66,40 @@ func NewConfig(f string) (*fileConfig, error) {
 	}
 
 	return c, nil
+}
+
+func (c *fileConfig) HasKey(key string) bool {
+	for _, v := range c.Keys() {
+		if v == key {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (c *fileConfig) Keys() []string {
+	keys := make([]string, len(c.f))
+
+	i := 0
+	for k := range c.m {
+		keys[i] = k
+		i += 1
+	}
+
+	return keys
+}
+
+func (c *fileConfig) Values() []string {
+	values := make([]string, len(c.f))
+
+	i := 0
+	for _, v := range c.m {
+		values[i] = v
+		i += 1
+	}
+
+	return values
 }
 
 func (c *fileConfig) Get(key string) string {
@@ -92,7 +129,7 @@ func (c *fileConfig) Load() {
 	c.parse(r)
 }
 
-func (c *fileConfig) Edit() string {
+func (c *fileConfig) FilePath() string {
 	fp, err := filepath.Abs(c.f)
 
 	if err != nil {
