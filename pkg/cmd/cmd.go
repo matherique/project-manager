@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -9,7 +10,7 @@ func Exec(c string, args ...string) error {
 	p, err := exec.LookPath(c)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("file not found")
 	}
 
 	a := append([]string{c}, args...)
@@ -21,11 +22,5 @@ func Exec(c string, args ...string) error {
 		Stdin:  os.Stdin,
 	}
 
-	err = cmd.Run()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return cmd.Run()
 }

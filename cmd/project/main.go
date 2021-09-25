@@ -42,11 +42,14 @@ func main() {
 	case "create":
 		crt.Exec(os.Args[2:])
 	case "open":
-		op.Exec(os.Args[2:])
+		err = op.Exec(os.Args[2:])
 	case "config":
-		cfg.Exec(os.Args[2:])
+		err = cfg.Exec(os.Args[2:])
 	default:
 		fmt.Println("subcommand not found, try: create|open|edit|config")
 	}
 
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
 }

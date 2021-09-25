@@ -117,7 +117,7 @@ func (c *fileConfig) Set(key, value string) {
 }
 
 func (c *fileConfig) Save() error {
-	return nil
+	return fmt.Errorf("not implemented")
 }
 
 func (c *fileConfig) Load() {

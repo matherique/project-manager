@@ -1,7 +1,7 @@
 package open
 
 import (
-	"log"
+	"fmt"
 	"path"
 
 	"github.com/matherique/project-manager/pkg/cmd"
@@ -18,18 +18,14 @@ func NewOpen(c fc.FileConfig) *open {
 	return o
 }
 
-func (o *open) Exec(a []string) {
+func (o *open) Exec(a []string) error {
 	if len(a) == 0 {
-		log.Fatalf("missing project name")
+		return fmt.Errorf("missing project name")
 	}
 
 	o.c.Load()
 	sp := o.c.Get("scripts")
 	fp := path.Join(sp, a[0])
 
-	err := cmd.Exec(fp)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	return cmd.Exec(fp)
 }
