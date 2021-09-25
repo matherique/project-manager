@@ -1,6 +1,9 @@
 #!/bin/bash
 
-rm project
+if test -f "project"; then
+  rm project
+fi
+
 go build ./cmd/project
 
 ./project $@
