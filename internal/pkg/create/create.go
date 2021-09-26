@@ -2,8 +2,6 @@ package create
 
 import (
 	"fmt"
-	"html/template"
-	"os"
 	"path"
 
 	"github.com/matherique/project-manager/pkg/cmd"
@@ -34,33 +32,15 @@ func (c *create) Exec(a []string) error {
 		return fmt.Errorf("missing project name")
 	}
 
-	fn := a[0]
-	fp := path.Join(c.c.Get("scripts"), fn)
-	f, err := os.Create(fp)
+	fp := path.Join(c.c.Get("scripts"), a[0])
+
+	err := createFile(fp)
 
 	if err != nil {
-		return fmt.Errorf("could not create file: %v", err)
-	}
-
-	t := template.Must(template.New("project").Parse(tpl))
-
-	err = t.Execute(f, fn)
-
-	if err != nil {
-		return fmt.Errorf("could not save template file: %v", err)
-	}
-
-	err = os.Chmod(fn, 0777)
-
-	if err != nil {
-		return fmt.Errorf("could not save template file: %v", err)
+		return err
 	}
 
 	edt := c.c.Get("editor")
 
 	return cmd.Exec(edt, fp)
-}
-
-func (c *create) CreateFile() error {
-	return nil
 }
