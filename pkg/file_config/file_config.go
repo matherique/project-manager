@@ -46,6 +46,7 @@ type FileConfig interface {
 	HasKey(k string) bool
 	Keys() []string
 	Values() []string
+	Raw() []string
 }
 
 type fileConfig struct {
@@ -79,7 +80,7 @@ func (c *fileConfig) HasKey(key string) bool {
 }
 
 func (c *fileConfig) Keys() []string {
-	keys := make([]string, len(c.f))
+	keys := make([]string, len(c.m))
 
 	i := 0
 	for k := range c.m {
@@ -112,12 +113,40 @@ func (c *fileConfig) Get(key string) string {
 	return strings.Trim(v, "\"")
 }
 
+func (c *fileConfig) Raw() []string {
+	r := make([]string, len(c.m))
+
+	for i, k := range c.Keys() {
+		r[i] = fmt.Sprintf("%s=%s", k, c.m[k])
+	}
+
+	return r
+}
+
 func (c *fileConfig) Set(key, value string) {
 	c.m[key] = value
 }
 
 func (c *fileConfig) Save() error {
-	return fmt.Errorf("not implemented")
+	err := os.Truncate(c.FilePath(), 0)
+
+	if err != nil {
+		return err
+	}
+
+	f, err := os.OpenFile(c.FilePath(), os.O_WRONLY, 0755)
+
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	for _, r := range c.Raw() {
+		f.Write([]byte(fmt.Sprintln(r)))
+	}
+
+	return nil
 }
 
 func (c *fileConfig) Load() {
