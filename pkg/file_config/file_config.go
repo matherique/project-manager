@@ -123,9 +123,7 @@ func (c *fileConfig) Raw() []string {
 	return r
 }
 
-func (c *fileConfig) Set(key, value string) {
-	c.m[key] = value
-}
+func (c *fileConfig) Set(key, value string) { c.m[key] = value }
 
 func (c *fileConfig) Save() error {
 	err := os.Truncate(c.FilePath(), 0)
@@ -202,15 +200,7 @@ func (c *fileConfig) parse(r io.Reader) {
 
 }
 
-func (c *fileConfig) All() string {
-	var all []string
-
-	for k, v := range c.m {
-		all = append(all, fmt.Sprintf("%s=%s", k, v))
-	}
-
-	return strings.Join(all, "\n")
-}
+func (c *fileConfig) All() string { return strings.Join(c.Raw(), "\n") }
 
 func (c *fileConfig) ConfigFile() string {
 	if c.f == "" {

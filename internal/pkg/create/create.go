@@ -3,6 +3,7 @@ package create
 import (
 	"fmt"
 	"path"
+	"strings"
 
 	"github.com/matherique/project-manager/pkg/cmd"
 	fc "github.com/matherique/project-manager/pkg/file_config"
@@ -32,7 +33,9 @@ func (c *create) Exec(a []string) error {
 		return fmt.Errorf("missing project name")
 	}
 
-	fp := path.Join(c.c.Get("scripts"), a[0])
+	name := a[0]
+
+	fp := path.Join(c.c.Get("scripts"), name)
 
 	err := createFile(fp)
 
@@ -42,5 +45,24 @@ func (c *create) Exec(a []string) error {
 
 	edt := c.c.Get("editor")
 
-	return cmd.Exec(edt, fp)
+	err = cmd.Exec(edt, fp)
+
+	if err != nil {
+		return err
+	}
+
+	p := c.c.Get("projects")
+
+	var pl []string
+	if p == "" {
+		pl = []string{}
+	} else {
+		pl = strings.Split(p, ";")
+	}
+
+	pl = append(pl, name)
+
+	c.c.Set("projects", strings.Join(pl, ";"))
+
+	return c.c.Save()
 }
