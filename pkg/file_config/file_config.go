@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -120,6 +121,7 @@ func (c *fileConfig) Raw() []string {
 		r[i] = fmt.Sprintf("%s=%s", k, c.m[k])
 	}
 
+	sort.Strings(r)
 	return r
 }
 
@@ -197,7 +199,6 @@ func (c *fileConfig) parse(r io.Reader) {
 
 		c.m[res[1]] = res[2]
 	}
-
 }
 
 func (c *fileConfig) All() string { return strings.Join(c.Raw(), "\n") }
