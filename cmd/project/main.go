@@ -37,8 +37,8 @@ func main() {
 	// 	cmd = cfg
 	// case "list":
 	// 	cmd = list
-	// case "edit":
-	// 	cmd = edit
+	case "edit":
+		cmd = cmd_edit
 	default:
 		cmd = nil
 	}
