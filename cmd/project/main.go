@@ -7,6 +7,7 @@ import (
 
 	"github.com/matherique/project-manager/internal/pkg/config"
 	"github.com/matherique/project-manager/internal/pkg/create"
+	"github.com/matherique/project-manager/internal/pkg/edit"
 	"github.com/matherique/project-manager/internal/pkg/list"
 	"github.com/matherique/project-manager/internal/pkg/open"
 	fc "github.com/matherique/project-manager/pkg/file_config"
@@ -39,6 +40,7 @@ func main() {
 	op := open.NewOpen(c)
 	cfg := config.NewConfig(c)
 	list := list.NewList(c)
+	edit := edit.NewEdit(c)
 
 	switch os.Args[1] {
 	case "create":
@@ -49,6 +51,8 @@ func main() {
 		err = cfg.Exec(os.Args[2:])
 	case "list":
 		err = list.Exec(os.Args[2:])
+	case "edit":
+		err = edit.Exec(os.Args[2:])
 	default:
 		fmt.Println("subcommand not found, try: create|open|edit|config")
 	}
