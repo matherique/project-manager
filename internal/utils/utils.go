@@ -1,27 +1,30 @@
-package create
+package utils
 
 import (
 	"fmt"
-	"html/template"
 	"os"
+	"path"
+	"text/template"
 )
 
-func createFile(file string) error {
+func CreateFile(file, tpl string) error {
 	f, err := os.Create(file)
 
 	if err != nil {
 		return fmt.Errorf("could not create file: %v", err)
 	}
 
+	name := path.Base(file)
+
 	t := template.Must(template.New("project").Parse(tpl))
 
-	err = t.Execute(f, f.Name())
+	err = t.Execute(f, name)
 
 	if err != nil {
 		return fmt.Errorf("could not save template file: %v", err)
 	}
 
-	err = os.Chmod(f.Name(), 0777)
+	err = os.Chmod(name, 0777)
 
 	if err != nil {
 		return fmt.Errorf("could not save template file: %v", err)
