@@ -1,3 +1,3 @@
-scripts=/home/matherique/personal/project-manager
-projects=glenmark;seila
 editor=nvim
+projects=glenmark;seila;test
+scripts=/home/matherique/personal/project-manager

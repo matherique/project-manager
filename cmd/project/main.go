@@ -5,18 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/matherique/project-manager/internal/pkg/config"
-	"github.com/matherique/project-manager/internal/pkg/create"
-	"github.com/matherique/project-manager/internal/pkg/edit"
-	"github.com/matherique/project-manager/internal/pkg/list"
-	"github.com/matherique/project-manager/internal/pkg/open"
 	fc "github.com/matherique/project-manager/pkg/file_config"
 )
-
-type Teste struct {
-	Editor  string
-	Scripts string
-}
 
 func main() {
 	c, err := fc.NewConfig("config")
@@ -36,26 +26,29 @@ func main() {
 		log.Fatalf("could not read config file: %v", err)
 	}
 
-	crt := create.NewCreate(c)
-	op := open.NewOpen(c)
-	cfg := config.NewConfig(c)
-	list := list.NewList(c)
-	edit := edit.NewEdit(c)
+	var cmd func([]string, fc.FileConfig) error
 
 	switch os.Args[1] {
 	case "create":
-		err = crt.Exec(os.Args[2:])
-	case "open":
-		err = op.Exec(os.Args[2:])
-	case "config":
-		err = cfg.Exec(os.Args[2:])
-	case "list":
-		err = list.Exec(os.Args[2:])
-	case "edit":
-		err = edit.Exec(os.Args[2:])
+		cmd = cmd_create
+	// case "open":
+	// 	cmd = op
+	// case "config":
+	// 	cmd = cfg
+	// case "list":
+	// 	cmd = list
+	// case "edit":
+	// 	cmd = edit
 	default:
-		fmt.Println("subcommand not found, try: create|open|edit|config")
+		cmd = nil
 	}
+
+	if cmd == nil {
+		fmt.Println("subcommand not found, try: create|open|edit|config")
+		os.Exit(1)
+	}
+
+	err = cmd(os.Args[2:], c)
 
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
