@@ -1,6 +1,6 @@
 # 🗃️ Project manager
 
-> A project manager that setup all my environment
+> A project manager that configure the entire environment
 
 ## Motivation
 
@@ -22,41 +22,41 @@ project config <key> <value>
 project config edit
 ```
 
-## `project create <name>`
+### `project create <name>`
 
 Open the editor configured in `project config` to create the tmux
 script to open setup the project.
 
-* `<name>` is the name of the project
+- `<name>` is the name of the project
 
-## `project edit <name>`
+### `project edit <name>`
 
 Open the bash script that contains all the tmux code to setup the
 project.
 
-* `<name>` is the name of the project
+- `<name>` is the name of the project
 
-## `project open`
+### `project open`
 
 Execute the bash script to run all tmux code
 
-## `project config`
+### `project config`
 
 List all the config setup
 
-## `project config <key>`
+### `project config <key>`
 
 List the value in the config
 
-* `<key>` is the name of the config that you looking for
+- `<key>` is the name of the config that you looking for
 
-## `project config <key> <value>`
+### `project config <key> <value>`
 
 Set the value to the config key
 
-* `<key>` is the name of the config that you looking for
-* `<value>` is the value to set
+- `<key>` is the name of the config that you looking for
+- `<value>` is the value to set
 
-## `project config edit`
+### `project config edit`
 
 Open the config file in to the editor to edit
