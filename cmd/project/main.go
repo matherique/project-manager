@@ -31,8 +31,8 @@ func main() {
 	switch os.Args[1] {
 	case "create":
 		cmd = cmd_create
-	// case "open":
-	// 	cmd = op
+	case "open":
+		cmd = cmd_open
 	// case "config":
 	// 	cmd = cfg
 	// case "list":
