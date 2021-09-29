@@ -35,8 +35,8 @@ func main() {
 		cmd = cmd_open
 	// case "config":
 	// 	cmd = cfg
-	// case "list":
-	// 	cmd = list
+	case "list":
+		cmd = cmd_list
 	case "edit":
 		cmd = cmd_edit
 	default:
