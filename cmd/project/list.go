@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	fc "github.com/matherique/project-manager/pkg/file_config"
+	fc "github.com/matherique/project-manager/internal/file_config"
 )
 
 func cmd_list(args []string, c fc.FileConfig) error {

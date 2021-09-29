@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/matherique/project-manager/pkg/cmd"
-	fc "github.com/matherique/project-manager/pkg/file_config"
+	"github.com/matherique/project-manager/internal/cmd"
+	fc "github.com/matherique/project-manager/internal/file_config"
 )
 
 func cmd_edit(args []string, c fc.FileConfig) error {

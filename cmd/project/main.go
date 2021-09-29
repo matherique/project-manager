@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	fc "github.com/matherique/project-manager/pkg/file_config"
+	fc "github.com/matherique/project-manager/internal/file_config"
 )
 
 func main() {
@@ -33,8 +33,8 @@ func main() {
 		cmd = cmd_create
 	case "open":
 		cmd = cmd_open
-	// case "config":
-	// 	cmd = cfg
+	case "config":
+		cmd = cmd_config
 	case "list":
 		cmd = cmd_list
 	case "edit":

@@ -5,9 +5,9 @@ import (
 	"path"
 	"strings"
 
+	"github.com/matherique/project-manager/internal/cmd"
+	fc "github.com/matherique/project-manager/internal/file_config"
 	"github.com/matherique/project-manager/internal/utils"
-	"github.com/matherique/project-manager/pkg/cmd"
-	fc "github.com/matherique/project-manager/pkg/file_config"
 )
 
 const tpl = `#!/bin/bash
