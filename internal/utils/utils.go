@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-func CreateFile(file, tpl string) error {
+func CreateFile(file string) error {
 	f, err := os.Create(file)
 
 	if err != nil {
@@ -16,7 +16,7 @@ func CreateFile(file, tpl string) error {
 
 	name := path.Base(file)
 
-	t := template.Must(template.New("project").Parse(tpl))
+	t := template.Must(template.New("project").ParseFiles("./template/project"))
 
 	err = t.Execute(f, name)
 

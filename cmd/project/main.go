@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	c, err := fc.NewConfig("config")
+	c, err := fc.NewConfig("./configs/config")
 
 	if err != nil {
 		log.Fatalf("could not load config file: %v", err)
