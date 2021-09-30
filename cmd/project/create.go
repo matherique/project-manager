@@ -10,13 +10,6 @@ import (
 	"github.com/matherique/project-manager/internal/utils"
 )
 
-const tpl = `#!/bin/bash
-
-project={{.}}
-
-tmux new-session -s $project
-`
-
 func cmd_create(a []string, c fc.FileConfig) error {
 	c.Load()
 
@@ -28,7 +21,7 @@ func cmd_create(a []string, c fc.FileConfig) error {
 
 	fp := path.Join(c.Get("scripts"), name)
 
-	err := utils.CreateFile(fp, tpl)
+	err := utils.CreateFile(fp)
 
 	if err != nil {
 		return err
