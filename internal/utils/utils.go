@@ -8,7 +8,7 @@ import (
 )
 
 func CreateFile(file string) error {
-	f, err := os.Create(file)
+	f, err := os.OpenFile(file, os.O_CREATE|os.O_WRONLY, 0777)
 
 	if err != nil {
 		return fmt.Errorf("could not create file: %v", err)
@@ -18,17 +18,5 @@ func CreateFile(file string) error {
 
 	t := template.Must(template.New("project").ParseFiles("./template/project"))
 
-	err = t.Execute(f, name)
-
-	if err != nil {
-		return fmt.Errorf("could not save template file: %v", err)
-	}
-
-	err = os.Chmod(name, 0777)
-
-	if err != nil {
-		return fmt.Errorf("could not save template file: %v", err)
-	}
-
-	return nil
+	return t.Execute(f, name)
 }
