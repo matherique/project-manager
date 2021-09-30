@@ -16,7 +16,7 @@ func CreateFile(file string) error {
 
 	name := path.Base(file)
 
-	t := template.Must(template.New("project").ParseFiles("./template/project"))
+	t := template.Must(template.New("project").ParseFiles("./template/project.tmpl"))
 
 	return t.Execute(f, name)
 }
