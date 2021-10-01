@@ -16,6 +16,7 @@ creating small utilities that helps my workflow
 project create <name>
 project edit <name>
 project open <name>
+project list
 project config
 project config <key>
 project config <key> <value>
@@ -39,6 +40,10 @@ project.
 ### `project open`
 
 Execute the bash script to run all tmux code
+
+### `project list`
+
+Return a list of created projects
 
 ### `project config`
 
