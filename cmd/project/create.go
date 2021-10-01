@@ -45,8 +45,9 @@ func cmd_create(a []string, c fc.FileConfig) error {
 
 	p := c.Get("projects")
 
-	pl := []string{}
-	if p != " " {
+	var pl []string
+
+	if p != "" {
 		pl = strings.Split(p, ";")
 	}
 
