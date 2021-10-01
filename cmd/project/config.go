@@ -54,7 +54,7 @@ func GetKey(c fc.FileConfig, key string) error {
 }
 
 func Edit(c fc.FileConfig) error {
-	cf := c.FilePath()
+	cf := c.Path()
 
 	if cf == "" {
 		return fmt.Errorf("config file not found")

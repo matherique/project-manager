@@ -9,15 +9,10 @@ import (
 )
 
 func main() {
-	c, err := fc.NewConfig("./configs/config")
+	c, err := fc.NewConfig()
 
 	if err != nil {
 		log.Fatalf("could not load config file: %v", err)
-	}
-
-	if len(os.Args) < 2 {
-		fmt.Println("subcommand not found, try: create|open|edit|config")
-		os.Exit(1)
 	}
 
 	err = c.Read()
@@ -52,5 +47,6 @@ func main() {
 
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }

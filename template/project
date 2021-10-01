@@ -1,5 +1,0 @@
-#!/bin/bash
-
-project={{.}}
-
-tmux new-session -s $project
