@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
+	"text/template"
 )
 
 type Getter interface {
@@ -48,27 +50,63 @@ type FileConfig interface {
 	Keys() []string
 	Values() []string
 	Raw() []string
+	HasConfigFile() bool
+	Path() string
+	Home() string
+	Create() error
+	Default() (defaultConfig, error)
+	Template() string
 }
 
 type fileConfig struct {
+	h string
 	f string
 	m map[string]string
 }
 
-func NewConfig(f string) (*fileConfig, error) {
+type defaultConfig struct {
+	Editor   string
+	Scripts  string
+	Projects string
+}
+
+func NewConfig() (*fileConfig, error) {
 	m := make(map[string]string)
 	c := new(fileConfig)
 	c.m = m
-	c.f = f
+	c.f = "config"
 
-	err := c.Read()
+	h, err := os.UserConfigDir()
 
 	if err != nil {
 		return nil, err
 	}
 
+	exe, _ := os.Executable()
+	c.h = path.Join(h, path.Base(exe))
+
+	if !c.HasConfigFile() {
+		err = c.Create()
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return c, nil
 }
+
+func (c *fileConfig) HasConfigFile() bool {
+	_, err := os.Stat(c.Path())
+
+	if err != nil {
+		return false
+	}
+
+	return os.IsNotExist(err)
+}
+
+func (c *fileConfig) Path() string { return path.Join(c.h, c.f) }
 
 func (c *fileConfig) HasKey(key string) bool {
 	for _, v := range c.Keys() {
@@ -150,8 +188,7 @@ func (c *fileConfig) Save() error {
 }
 
 func (c *fileConfig) Load() {
-	f := c.ConfigFile()
-	r, _ := os.Open(f)
+	r, _ := os.Open(c.Path())
 
 	defer r.Close()
 
@@ -169,12 +206,10 @@ func (c *fileConfig) FilePath() string {
 }
 
 func (c *fileConfig) Read() error {
-	f := c.ConfigFile()
-
-	r, err := os.Open(f)
+	r, err := os.Open(c.Path())
 
 	if err != nil {
-		return fmt.Errorf("could not open file %v", err)
+		return err
 	}
 
 	defer r.Close()
@@ -203,11 +238,40 @@ func (c *fileConfig) parse(r io.Reader) {
 
 func (c *fileConfig) All() string { return strings.Join(c.Raw(), "\n") }
 
-func (c *fileConfig) ConfigFile() string {
-	if c.f == "" {
-		// TODO: get config path
-		return "config"
+func (c *fileConfig) Home() string { return c.h }
+
+func (c *fileConfig) Create() error {
+	defaults, err := c.Default()
+
+	if err != nil {
+		return err
 	}
 
-	return c.f
+	f, _ := os.OpenFile(c.Path(), os.O_CREATE|os.O_WRONLY, 0666)
+
+	t := template.Must(template.New("project").Parse(c.Template()))
+
+	return t.Execute(f, defaults)
+}
+
+func (c *fileConfig) Default() (defaultConfig, error) {
+	e := os.Getenv("EDITOR")
+	s := path.Join(c.Home(), "scripts")
+
+	if err := os.MkdirAll(s, 0700); err != nil {
+		return defaultConfig{}, err
+	}
+
+	return defaultConfig{
+		Editor:   e,
+		Scripts:  s,
+		Projects: "",
+	}, nil
+}
+
+func (c *fileConfig) Template() string {
+	return `editor={{.Editor}}
+projects={{.Projects}}
+scripts={{.Scripts}}
+`
 }
