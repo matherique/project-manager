@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"path"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -33,17 +32,12 @@ type Reader interface {
 	Read() error
 }
 
-type FilePather interface {
-	FilePath() string
-}
-
 type FileConfig interface {
 	Getter
 	Setter
 	Saver
 	Loader
 	Reader
-	FilePather
 	parse(r io.Reader)
 	All() string
 	HasKey(k string) bool
@@ -97,13 +91,8 @@ func NewConfig() (*fileConfig, error) {
 }
 
 func (c *fileConfig) HasConfigFile() bool {
-	_, err := os.Stat(c.Path())
-
-	if err != nil {
-		return false
-	}
-
-	return os.IsNotExist(err)
+	f, _ := os.Stat(c.Path())
+	return f != nil
 }
 
 func (c *fileConfig) Path() string { return path.Join(c.h, c.f) }
@@ -166,20 +155,19 @@ func (c *fileConfig) Raw() []string {
 func (c *fileConfig) Set(key, value string) { c.m[key] = value }
 
 func (c *fileConfig) Save() error {
-	err := os.Truncate(c.FilePath(), 0)
+	err := os.Truncate(c.Path(), 0)
 
 	if err != nil {
 		return err
 	}
 
-	f, err := os.OpenFile(c.FilePath(), os.O_WRONLY, 0755)
+	f, err := os.OpenFile(c.Path(), os.O_WRONLY|os.O_TRUNC, 0755)
 
 	if err != nil {
 		return err
 	}
 
 	defer f.Close()
-
 	for _, r := range c.Raw() {
 		f.Write([]byte(fmt.Sprintln(r)))
 	}
@@ -193,16 +181,6 @@ func (c *fileConfig) Load() {
 	defer r.Close()
 
 	c.parse(r)
-}
-
-func (c *fileConfig) FilePath() string {
-	fp, err := filepath.Abs(c.f)
-
-	if err != nil {
-		return ""
-	}
-
-	return fp
 }
 
 func (c *fileConfig) Read() error {
@@ -221,7 +199,6 @@ func (c *fileConfig) Read() error {
 
 func (c *fileConfig) parse(r io.Reader) {
 	s := bufio.NewScanner(r)
-
 	c.m = make(map[string]string)
 
 	for s.Scan() {
