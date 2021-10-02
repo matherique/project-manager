@@ -1,9 +1,9 @@
 package project
 
 import (
+	"fmt"
 	"os"
 	"path"
-	"strings"
 
 	fc "github.com/matherique/project-manager/internal/file_config"
 )
@@ -47,18 +47,20 @@ func Path(c fc.FileConfig, name string) string {
 	return path.Join(c.Get("scripts"), name)
 }
 
-func Add(c fc.FileConfig, name string) error {
-	p := c.Get("projects")
+func Remove(c fc.FileConfig, name string) error {
+	c.Load()
 
-	var pl []string
-
-	if p != "" {
-		pl = strings.Split(p, ";")
+	if !Exists(c, name) {
+		return fmt.Errorf("project not found")
 	}
 
-	pl = append(pl, name)
+	err := os.Remove(Path(c, name))
 
-	c.Set("projects", strings.Join(pl, ";"))
+	if err != nil {
+		return err
+	}
 
-	return c.Save()
+	fmt.Fprintln(os.Stdout, "project removed with successfully")
+
+	return nil
 }

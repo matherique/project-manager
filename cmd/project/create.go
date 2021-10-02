@@ -40,11 +40,5 @@ func cmd_create(a []string, c fc.FileConfig) error {
 
 	edt := c.Get("editor")
 
-	err = cmd.Exec(edt, fp)
-
-	if err != nil {
-		return err
-	}
-
-	return project.Add(c, name)
+	return cmd.Exec(edt, fp)
 }
