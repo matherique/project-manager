@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"path"
-	"strings"
 
 	"github.com/matherique/project-manager/internal/cmd"
 	fc "github.com/matherique/project-manager/internal/file_config"
+	"github.com/matherique/project-manager/internal/project"
 	"github.com/matherique/project-manager/internal/utils"
 )
 
@@ -27,7 +26,11 @@ func cmd_create(a []string, c fc.FileConfig) error {
 
 	name := a[0]
 
-	fp := path.Join(c.Get("scripts"), name)
+	if project.Exists(c, name) {
+		return fmt.Errorf("a project with this name already exists")
+	}
+
+	fp := project.Path(c, name)
 
 	err := utils.CreateFile(fp, tpl)
 
@@ -43,17 +46,5 @@ func cmd_create(a []string, c fc.FileConfig) error {
 		return err
 	}
 
-	p := c.Get("projects")
-
-	var pl []string
-
-	if p != "" {
-		pl = strings.Split(p, ";")
-	}
-
-	pl = append(pl, name)
-
-	c.Set("projects", strings.Join(pl, ";"))
-
-	return c.Save()
+	return project.Add(c, name)
 }

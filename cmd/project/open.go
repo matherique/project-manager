@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"path"
 
 	"github.com/matherique/project-manager/internal/cmd"
 	fc "github.com/matherique/project-manager/internal/file_config"
+	"github.com/matherique/project-manager/internal/project"
 )
 
 func cmd_open(a []string, c fc.FileConfig) error {
@@ -14,8 +14,14 @@ func cmd_open(a []string, c fc.FileConfig) error {
 	}
 
 	c.Load()
-	sp := c.Get("scripts")
-	fp := path.Join(sp, a[0])
+
+	n := a[0]
+
+	if !project.Exists(c, n) {
+		return fmt.Errorf("project not found")
+	}
+
+	fp := project.Path(c, n)
 
 	return cmd.Exec(fp)
 }

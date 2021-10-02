@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"path"
-	"strings"
 
 	"github.com/matherique/project-manager/internal/cmd"
 	fc "github.com/matherique/project-manager/internal/file_config"
+	"github.com/matherique/project-manager/internal/project"
 )
 
 func cmd_edit(args []string, c fc.FileConfig) error {
@@ -16,7 +15,7 @@ func cmd_edit(args []string, c fc.FileConfig) error {
 
 	c.Load()
 
-	pl := strings.Split(c.Get("projects"), ";")
+	pl := project.All(c)
 
 	if len(pl) == 0 {
 		return fmt.Errorf("no project created")
@@ -33,7 +32,5 @@ func cmd_edit(args []string, c fc.FileConfig) error {
 		return fmt.Errorf("no project found with this name: %s", args[0])
 	}
 
-	pth := path.Join(c.Get("scripts"), args[0])
-
-	return cmd.Exec(c.Get("editor"), pth)
+	return cmd.Exec(c.Get("editor"), project.Path(c, p))
 }

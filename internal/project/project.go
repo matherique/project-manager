@@ -2,6 +2,8 @@ package project
 
 import (
 	"os"
+	"path"
+	"strings"
 
 	fc "github.com/matherique/project-manager/internal/file_config"
 )
@@ -35,4 +37,28 @@ func All(c fc.FileConfig) []string {
 	}
 
 	return fnames
+}
+
+func Path(c fc.FileConfig, name string) string {
+	if !Exists(c, name) {
+		return ""
+	}
+
+	return path.Join(c.Get("scripts"), name)
+}
+
+func Add(c fc.FileConfig, name string) error {
+	p := c.Get("projects")
+
+	var pl []string
+
+	if p != "" {
+		pl = strings.Split(p, ";")
+	}
+
+	pl = append(pl, name)
+
+	c.Set("projects", strings.Join(pl, ";"))
+
+	return c.Save()
 }

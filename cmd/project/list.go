@@ -6,18 +6,19 @@ import (
 	"strings"
 
 	fc "github.com/matherique/project-manager/internal/file_config"
+	"github.com/matherique/project-manager/internal/project"
 )
 
 func cmd_list(args []string, c fc.FileConfig) error {
 	c.Load()
 
-	p := strings.Split(c.Get("projects"), ";")
+	all := project.All(c)
 
-	if len(p) == 0 {
+	if len(all) == 0 {
 		fmt.Fprintln(os.Stdout, "no project found")
 	}
 
-	fmt.Fprintln(os.Stdout, strings.Join(p, "\n"))
+	fmt.Fprintln(os.Stdout, strings.Join(all, "\n"))
 
 	return nil
 }
