@@ -39,7 +39,7 @@ func main() {
 	}
 
 	if cmd == nil {
-		fmt.Println("subcommand not found, try: create|open|edit|config")
+		fmt.Fprintln(os.Stdout, "subcommand not found, try: create|open|edit|config")
 		os.Exit(1)
 	}
 

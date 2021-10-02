@@ -48,7 +48,7 @@ func GetKey(c fc.FileConfig, key string) error {
 		return fmt.Errorf("key not found")
 	}
 
-	fmt.Println(c.Get(key))
+	fmt.Fprintln(os.Stdout, c.Get(key))
 
 	return nil
 }
