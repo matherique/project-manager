@@ -15,7 +15,7 @@ func cmd_list(args []string, c fc.FileConfig) error {
 	all := project.All(c)
 
 	if len(all) == 0 {
-		fmt.Fprintln(os.Stderr, "no project found")
+		return fmt.Errorf("no project found")
 	}
 
 	fmt.Fprintln(os.Stdout, strings.Join(all, "\n"))
