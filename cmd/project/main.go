@@ -34,12 +34,14 @@ func main() {
 		cmd = cmd_list
 	case "edit":
 		cmd = cmd_edit
+	case "remove":
+		cmd = cmd_remove
 	default:
 		cmd = nil
 	}
 
 	if cmd == nil {
-		fmt.Fprintln(os.Stdout, "subcommand not found, try: create|open|edit|config")
+		fmt.Fprintln(os.Stdout, "subcommand not found, try: create|open|edit|config|remove")
 		os.Exit(1)
 	}
 

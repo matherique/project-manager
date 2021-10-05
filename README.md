@@ -16,6 +16,7 @@ creating small utilities that helps my workflow
 project create <name>
 project edit <name>
 project open <name>
+project remove <name>
 project list
 project config
 project config <key>
@@ -37,9 +38,17 @@ project.
 
 - `<name>` is the name of the project
 
-### `project open`
+### `project open <name>`
 
 Execute the bash script to run all tmux code
+
+- `<name>` is the name of the project
+
+### `project remove <name>`
+
+Remove project script 
+
+- `<name>` is the name of the project
 
 ### `project list`
 
