@@ -40,10 +40,6 @@ func All(c fc.FileConfig) []string {
 }
 
 func Path(c fc.FileConfig, name string) string {
-	if !Exists(c, name) {
-		return ""
-	}
-
 	return path.Join(c.Get("scripts"), name)
 }
 
