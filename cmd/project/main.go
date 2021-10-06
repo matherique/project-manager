@@ -36,6 +36,8 @@ func main() {
 		cmd = cmd_edit
 	case "remove":
 		cmd = cmd_remove
+	case "rm":
+		cmd = cmd_remove
 	default:
 		cmd = nil
 	}
