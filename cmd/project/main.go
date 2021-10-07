@@ -28,6 +28,8 @@ func main() {
 		cmd = cmd_create
 	case "open":
 		cmd = cmd_open
+	case "new":
+		cmd = cmd_open
 	case "config":
 		cmd = cmd_config
 	case "list":
