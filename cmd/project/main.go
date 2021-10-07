@@ -32,6 +32,8 @@ func main() {
 		cmd = cmd_config
 	case "list":
 		cmd = cmd_list
+	case "ls":
+		cmd = cmd_list
 	case "edit":
 		cmd = cmd_edit
 	case "remove":
