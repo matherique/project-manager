@@ -10,18 +10,14 @@ automatize that I create this project. I could make in `bash`
 because is a small project, but I decide to use `golang` to practice
 creating small utilities that helps my workflow
 
+## Install 
+```
+go install github.com/matherique/project-manager/cmd/project@latest
+```
+
 ## Usage
 
 ```bash
-project create <name>
-project edit <name>
-project open <name>
-project remove <name>
-project list
-project config
-project config <key>
-project config <key> <value>
-project config edit
 project help
 ```
 
