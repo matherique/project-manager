@@ -22,16 +22,19 @@ func main() {
 	}
 
 	var cmd func([]string, fc.FileConfig) error
+	var doc string
 
 	switch os.Args[1] {
 	case "help":
 		cmd = cmd_help
 	case "create":
 		cmd = cmd_create
+		doc = doc_create
 	case "open":
 		cmd = cmd_open
 	case "new":
-		cmd = cmd_open
+		cmd = cmd_create
+		doc = doc_create
 	case "config":
 		cmd = cmd_config
 	case "list":
@@ -51,6 +54,11 @@ func main() {
 	if cmd == nil {
 		fmt.Fprintln(os.Stdout, "subcommand not found, try: create|open|edit|config|remove")
 		os.Exit(1)
+	}
+
+	if len(os.Args) > 1 && os.Args[2] == "help" {
+		fmt.Fprint(os.Stdout, doc)
+		return
 	}
 
 	err = cmd(os.Args[2:], c)

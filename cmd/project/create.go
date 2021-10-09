@@ -16,6 +16,11 @@ project={{.}}
 tmux new-session -s $project
 
 `
+const doc_create string = `
+Usage: project create [name] 
+
+Create new project script
+`
 
 func cmd_create(a []string, c fc.FileConfig) error {
 	c.Load()
