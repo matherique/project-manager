@@ -47,6 +47,8 @@ func main() {
 		cmd = cmd_remove
 	case "rm":
 		cmd = cmd_remove
+	case "fzf":
+		cmd = cmd_fzf
 	default:
 		cmd = nil
 	}
