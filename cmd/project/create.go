@@ -13,7 +13,7 @@ const tpl = `#!/bin/bash
 
 project={{.}}
 
-tmux new-session -s $project
+tmux new-session -s $project -d
 
 `
 const doc_create string = `
