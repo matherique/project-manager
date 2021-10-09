@@ -24,6 +24,8 @@ func main() {
 	var cmd func([]string, fc.FileConfig) error
 
 	switch os.Args[1] {
+	case "help":
+		cmd = cmd_help
 	case "create":
 		cmd = cmd_create
 	case "open":
