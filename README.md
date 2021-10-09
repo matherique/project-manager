@@ -22,6 +22,7 @@ project config
 project config <key>
 project config <key> <value>
 project config edit
+project help
 ```
 
 ### `project create <name>`
@@ -74,3 +75,7 @@ Set the value to the config key
 ### `project config edit`
 
 Open the config file in to the editor to edit
+
+### `project help`
+
+List the app documentation
