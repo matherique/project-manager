@@ -24,6 +24,13 @@ func main() {
 	var cmd func([]string, fc.FileConfig) error
 	var doc string
 
+	if len(os.Args) == 1 {
+		if err := cmd_fzf([]string{}, c); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		return
+	}
+
 	switch os.Args[1] {
 	case "help":
 		cmd = cmd_help
