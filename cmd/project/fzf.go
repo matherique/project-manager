@@ -13,6 +13,10 @@ import (
 func cmd_fzf(_ []string, c fc.FileConfig) error {
 	projects := project.All(c)
 
+	if len(projects) == 0 {
+		return fmt.Errorf("no project found")
+	}
+
 	p, err := exec_fzf(projects)
 
 	if err != nil {
