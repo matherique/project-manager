@@ -29,6 +29,10 @@ func cmd_fzf(_ []string, c fc.FileConfig) error {
 		return err
 	}
 
+	if p == "" {
+		return nil
+	}
+
 	return cmd_open([]string{p}, c)
 }
 
