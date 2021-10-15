@@ -39,6 +39,7 @@ func main() {
 		doc = doc_create
 	case "open":
 		cmd = cmd_open
+		doc = doc_open
 	case "new":
 		cmd = cmd_create
 		doc = doc_create
