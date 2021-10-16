@@ -53,8 +53,10 @@ func main() {
 		cmd = cmd_edit
 	case "remove":
 		cmd = cmd_remove
+		doc = doc_remove
 	case "rm":
 		cmd = cmd_remove
+		doc = doc_remove
 	case "fzf":
 		cmd = cmd_fzf
 		doc = doc_fzf
