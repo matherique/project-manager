@@ -47,8 +47,10 @@ func main() {
 		cmd = cmd_config
 	case "list":
 		cmd = cmd_list
+		doc = doc_list
 	case "ls":
 		cmd = cmd_list
+		doc = doc_list
 	case "edit":
 		cmd = cmd_edit
 	case "remove":
