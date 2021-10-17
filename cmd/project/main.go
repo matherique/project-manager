@@ -46,6 +46,7 @@ func main() {
 		doc = doc_create
 	case "config":
 		cmd = cmd_config
+		doc = doc_config
 	case "list":
 		cmd = cmd_list
 		doc = doc_list

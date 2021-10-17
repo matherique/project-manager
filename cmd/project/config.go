@@ -8,6 +8,19 @@ import (
 	fc "github.com/matherique/project-manager/internal/file_config"
 )
 
+const doc_config string = `
+Usage:
+  project config                     Get all configuration
+  project config [name]              Get the configuration by name
+  project config [name] [value]      Set the configuration value
+
+Configurations avaliable:
+  editor     Editor binary name
+  scripts    Path to folder used to save projects
+
+Set or get configuration value
+`
+
 func cmd_config(a []string, c fc.FileConfig) error {
 	c.Load()
 
