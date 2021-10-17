@@ -55,6 +55,7 @@ func main() {
 		doc = doc_list
 	case "edit":
 		cmd = cmd_edit
+		doc = doc_edit
 	case "remove":
 		cmd = cmd_remove
 		doc = doc_remove
