@@ -8,6 +8,12 @@ import (
 	"github.com/matherique/project-manager/internal/project"
 )
 
+const doc_open string = `
+Usage: project open [name] 
+
+Execute the project script
+`
+
 func cmd_open(a []string, c fc.FileConfig) error {
 	if len(a) == 0 {
 		return fmt.Errorf("missing project name")

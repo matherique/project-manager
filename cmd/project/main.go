@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	fc "github.com/matherique/project-manager/internal/file_config"
 )
@@ -39,23 +40,31 @@ func main() {
 		doc = doc_create
 	case "open":
 		cmd = cmd_open
+		doc = doc_open
 	case "new":
 		cmd = cmd_create
 		doc = doc_create
 	case "config":
 		cmd = cmd_config
+		doc = doc_config
 	case "list":
 		cmd = cmd_list
+		doc = doc_list
 	case "ls":
 		cmd = cmd_list
+		doc = doc_list
 	case "edit":
 		cmd = cmd_edit
+		doc = doc_edit
 	case "remove":
 		cmd = cmd_remove
+		doc = doc_remove
 	case "rm":
 		cmd = cmd_remove
+		doc = doc_remove
 	case "fzf":
 		cmd = cmd_fzf
+		doc = doc_fzf
 	default:
 		cmd = nil
 	}
@@ -66,7 +75,7 @@ func main() {
 	}
 
 	if len(os.Args) == 3 && os.Args[2] == "help" {
-		fmt.Fprintln(os.Stdout, doc)
+		fmt.Fprintln(os.Stdout, strings.Trim(doc, "\n"))
 		return
 	}
 

@@ -10,6 +10,12 @@ import (
 	"github.com/matherique/project-manager/internal/project"
 )
 
+const doc_fzf string = `
+Usage: project fzf
+
+List all project with fzf, and open if selected
+`
+
 func cmd_fzf(_ []string, c fc.FileConfig) error {
 	projects := project.All(c)
 
@@ -21,6 +27,10 @@ func cmd_fzf(_ []string, c fc.FileConfig) error {
 
 	if err != nil {
 		return err
+	}
+
+	if p == "" {
+		return nil
 	}
 
 	return cmd_open([]string{p}, c)
