@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	fc "github.com/matherique/project-manager/internal/file_config"
 )
@@ -72,7 +73,7 @@ func main() {
 	}
 
 	if len(os.Args) == 3 && os.Args[2] == "help" {
-		fmt.Fprintln(os.Stdout, doc)
+		fmt.Fprintln(os.Stdout, strings.Trim(doc, "\n"))
 		return
 	}
 
