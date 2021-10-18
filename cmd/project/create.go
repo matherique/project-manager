@@ -12,9 +12,10 @@ import (
 const tpl = `#!/bin/bash
 
 project={{.}}
+location=
 
-tmux new-session -s $project -d
-
+cd "$location"
+tmux new-session -s $project -c $location -d
 `
 const doc_create string = `
 Usage: project create [name] 
