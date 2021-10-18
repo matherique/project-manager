@@ -16,6 +16,15 @@ location=
 
 cd "$location"
 tmux new-session -s $project -c $location -d
+
+# ======= dont remove ======= 
+if [ ! -z $TMUX ];
+then 
+  tmux switch -t $project
+else
+  tmux attach -t $project
+fi 
+
 `
 const doc_create string = `
 Usage: project create [name] 
