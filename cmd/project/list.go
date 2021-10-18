@@ -9,6 +9,12 @@ import (
 	"github.com/matherique/project-manager/internal/project"
 )
 
+const doc_list string = `
+Usage: project list|ls
+
+List all available projects
+`
+
 func cmd_list(args []string, c fc.FileConfig) error {
 	c.Load()
 
