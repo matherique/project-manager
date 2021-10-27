@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	fc "github.com/matherique/project-manager/internal/file_config"
+
+	command "github.com/matherique/cmd"
 )
 
 func main() {
@@ -22,66 +23,56 @@ func main() {
 		log.Fatalf("could not read config file: %v", err)
 	}
 
-	var cmd func([]string, fc.FileConfig) error
-	var doc string
+	init := command.New("project")
+	init.SetLongDesc(doc_help)
+	init.SetHandler(func(args []string) error {
+		return cmd_fzf(args, c)
+	})
 
-	if len(os.Args) == 1 {
-		if err := cmd_fzf([]string{}, c); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-		return
-	}
+	create := command.New("create", "new")
+	create.SetLongDesc(doc_create)
+	create.SetHandler(func(args []string) error {
+		return cmd_create(args, c)
+	})
 
-	switch os.Args[1] {
-	case "help":
-		cmd = cmd_help
-	case "create":
-		cmd = cmd_create
-		doc = doc_create
-	case "open":
-		cmd = cmd_open
-		doc = doc_open
-	case "new":
-		cmd = cmd_create
-		doc = doc_create
-	case "config":
-		cmd = cmd_config
-		doc = doc_config
-	case "list":
-		cmd = cmd_list
-		doc = doc_list
-	case "ls":
-		cmd = cmd_list
-		doc = doc_list
-	case "edit":
-		cmd = cmd_edit
-		doc = doc_edit
-	case "remove":
-		cmd = cmd_remove
-		doc = doc_remove
-	case "rm":
-		cmd = cmd_remove
-		doc = doc_remove
-	case "fzf":
-		cmd = cmd_fzf
-		doc = doc_fzf
-	default:
-		cmd = nil
-	}
+	open := command.New("open")
+	open.SetLongDesc(doc_open)
+	open.SetHandler(func(args []string) error {
+		return cmd_open(args, c)
+	})
 
-	if cmd == nil {
-		fmt.Fprintln(os.Stdout, "subcommand not found, try: create|open|edit|config|remove")
-		os.Exit(1)
-	}
+	config := command.New("config")
+	config.SetLongDesc(doc_config)
+	config.SetHandler(func(args []string) error {
+		return cmd_config(args, c)
+	})
 
-	if len(os.Args) == 3 && os.Args[2] == "help" {
-		fmt.Fprintln(os.Stdout, strings.Trim(doc, "\n"))
-		return
-	}
+	list := command.New("list", "ls")
+	list.SetLongDesc(doc_list)
+	list.SetHandler(func(args []string) error {
+		return cmd_list(args, c)
+	})
 
-	err = cmd(os.Args[2:], c)
+	remove := command.New("remove", "rm")
+	remove.SetLongDesc(doc_remove)
+	remove.SetHandler(func(args []string) error {
+		return cmd_remove(args, c)
+	})
 
-	if err != nil {
+	fzf := command.New("fzf")
+	fzf.SetLongDesc(doc_fzf)
+	fzf.SetHandler(func(args []string) error {
+		return cmd_fzf(args, c)
+	})
+
+	init.AddSub(create)
+	init.AddSub(open)
+	init.AddSub(config)
+	init.AddSub(list)
+	init.AddSub(remove)
+	init.AddSub(fzf)
+
+	if err := init.Run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

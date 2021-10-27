@@ -1,15 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"os"
-	"strings"
-
-	fc "github.com/matherique/project-manager/internal/file_config"
-)
-
-func cmd_help(_ []string, c fc.FileConfig) error {
-	doc := `
+const doc_help string = ` 
 Usage: project [command] [args]
 
 > A project setup manager
@@ -25,6 +16,3 @@ Commands:
 
 Use 'project [command] help' for more information about the command
 `
-	fmt.Fprintln(os.Stdout, strings.Trim(doc, "\n"))
-	return nil
-}
