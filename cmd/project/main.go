@@ -29,7 +29,7 @@ func main() {
 		return cmd_fzf(args, c)
 	})
 
-	create := command.New("create")
+	create := command.New("create", "new")
 	create.SetLongDesc(doc_create)
 	create.SetHandler(func(args []string) error {
 		return cmd_create(args, c)
@@ -47,13 +47,13 @@ func main() {
 		return cmd_config(args, c)
 	})
 
-	list := command.New("list")
+	list := command.New("list", "ls")
 	list.SetLongDesc(doc_list)
 	list.SetHandler(func(args []string) error {
 		return cmd_list(args, c)
 	})
 
-	remove := command.New("remove")
+	remove := command.New("remove", "rm")
 	remove.SetLongDesc(doc_remove)
 	remove.SetHandler(func(args []string) error {
 		return cmd_remove(args, c)

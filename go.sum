@@ -1,2 +1,4 @@
 github.com/matherique/cmd v0.0.0-20211024231739-feb8145d0bca h1:V1QxRaddM1xfxzPqK/WqmtJvs0jruAJIzVh+gWr8qs0=
 github.com/matherique/cmd v0.0.0-20211024231739-feb8145d0bca/go.mod h1:q7qH+KA2Yqju2Gs5r4Q94w077z2URj/IFwD6qvu64Ok=
+github.com/matherique/cmd v0.0.0-20211026015205-b6aaa8c27105 h1:XxD1ZRkY9jkwEzVle5hURQ06Kchv93V9C5+cKdEJwAI=
+github.com/matherique/cmd v0.0.0-20211026015205-b6aaa8c27105/go.mod h1:q7qH+KA2Yqju2Gs5r4Q94w077z2URj/IFwD6qvu64Ok=
