@@ -77,6 +77,7 @@ func main() {
 	init.AddSub(list)
 	init.AddSub(remove)
 	init.AddSub(fzf)
+	init.AddSub(stop)
 
 	if err := init.Run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
