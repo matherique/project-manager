@@ -15,9 +15,27 @@ project={{.}}
 location=
 
 cd "$location"
-tmux new-session -s $project -c $location -d
+
+_up() {
+	tmux new-session -s $project -c $location -d
+
+	# all tmux code goes here
+}
+
+_down() {
+	# script to kill the tmux session gracifully
+}
 
 # ======= dont remove ======= 
+
+if [ "$1" = "up ]; then
+	_up
+elif [ "$1" = "down" ]; then
+	_down
+else
+	echo "usage: up|down"
+fi
+
 if [ ! -z $TMUX ];
 then 
   tmux switch -t $project

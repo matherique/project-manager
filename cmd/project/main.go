@@ -71,12 +71,19 @@ func main() {
 		return cmd_fzf(args, c)
 	})
 
+	stop := command.New("stop")
+	stop.SetLongDesc(doc_stop)
+	stop.SetHandler(func(args []string) error {
+		return cmd_stop(args, c)
+	})
+
 	init.AddSub(create)
 	init.AddSub(open)
 	init.AddSub(config)
 	init.AddSub(list)
 	init.AddSub(remove)
 	init.AddSub(fzf)
+	init.AddSub(stop)
 	init.AddSub(edit)
 
 	if err := init.Run(os.Args[1:]); err != nil {
