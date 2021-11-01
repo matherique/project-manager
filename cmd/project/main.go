@@ -41,6 +41,12 @@ func main() {
 		return cmd_open(args, c)
 	})
 
+	edit := command.New("edit")
+	edit.SetLongDesc(doc_edit)
+	edit.SetHandler(func(args []string) error {
+		return cmd_edit(args, c)
+	})
+
 	config := command.New("config")
 	config.SetLongDesc(doc_config)
 	config.SetHandler(func(args []string) error {
@@ -78,6 +84,7 @@ func main() {
 	init.AddSub(remove)
 	init.AddSub(fzf)
 	init.AddSub(stop)
+	init.AddSub(edit)
 
 	if err := init.Run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
