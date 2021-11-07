@@ -56,7 +56,5 @@ func Remove(c fc.FileConfig, name string) error {
 		return err
 	}
 
-	fmt.Fprintln(os.Stdout, "project removed with successfully")
-
 	return nil
 }
