@@ -29,5 +29,5 @@ func cmd_open(a []string, c fc.FileConfig) error {
 
 	fp := project.Path(c, n)
 
-	return cmd.Exec(fp)
+	return cmd.Exec(fp, "up")
 }
