@@ -28,7 +28,7 @@ _down() {
 
 # ======= dont remove ======= 
 
-if [ "$1" = "up ]; then
+if [ "$1" = "up" ]; then
 	_up
 elif [ "$1" = "down" ]; then
 	_down
