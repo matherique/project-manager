@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/matherique/project-manager/pkg/cmd"
-	fc "github.com/matherique/project-manager/pkg/file_config"
+	fc "github.com/matherique/project-manager/pkg/config"
 )
 
 const doc_config string = `

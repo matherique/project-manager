@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 
-	fc "github.com/matherique/project-manager/pkg/file_config"
+	fc "github.com/matherique/project-manager/pkg/config"
 )
 
 func Exists(c fc.FileConfig, name string) bool {

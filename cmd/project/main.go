@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	fc "github.com/matherique/project-manager/pkg/file_config"
+	fc "github.com/matherique/project-manager/pkg/config"
 
 	command "github.com/matherique/cmd"
 )

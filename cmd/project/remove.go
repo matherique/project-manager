@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	fc "github.com/matherique/project-manager/pkg/file_config"
-	"github.com/matherique/project-manager/pkg/project"
+	fc "github.com/matherique/project-manager/pkg/config"
+	"github.com/matherique/project-manager/internal/project"
 )
 
 const doc_remove string = `
