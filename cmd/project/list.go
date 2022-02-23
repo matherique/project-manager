@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	fc "github.com/matherique/project-manager/internal/file_config"
-	"github.com/matherique/project-manager/internal/project"
+	fc "github.com/matherique/project-manager/pkg/file_config"
+	"github.com/matherique/project-manager/pkg/project"
 )
 
 const doc_list string = `

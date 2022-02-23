@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/matherique/project-manager/internal/cmd"
-	fc "github.com/matherique/project-manager/internal/file_config"
-	"github.com/matherique/project-manager/internal/project"
-	"github.com/matherique/project-manager/internal/utils"
+	"github.com/matherique/project-manager/pkg/cmd"
+	fc "github.com/matherique/project-manager/pkg/file_config"
+	"github.com/matherique/project-manager/pkg/project"
+	"github.com/matherique/project-manager/pkg/utils"
 )
 
 const tpl = `#!/bin/bash
