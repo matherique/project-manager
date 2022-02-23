@@ -12,32 +12,12 @@ import (
 	"text/template"
 )
 
-type Getter interface {
-	Get(key string) string
-}
-
-type Setter interface {
-	Set(key, value string)
-}
-
-type Saver interface {
-	Save() error
-}
-
-type Loader interface {
-	Load()
-}
-
-type Reader interface {
-	Read() error
-}
-
 type FileConfig interface {
-	Getter
-	Setter
-	Saver
-	Loader
-	Reader
+	Get(key string) string
+	Set(key, value string)
+	Save() error
+	Load()
+	Read() error
 	parse(r io.Reader)
 	All() string
 	HasKey(k string) bool
@@ -52,7 +32,7 @@ type FileConfig interface {
 	Template() string
 }
 
-type fileConfig struct {
+type config struct {
 	h string
 	f string
 	m map[string]string
@@ -64,9 +44,9 @@ type defaultConfig struct {
 	Projects string
 }
 
-func NewConfig() (*fileConfig, error) {
+func NewConfig() (*config, error) {
 	m := make(map[string]string)
-	c := new(fileConfig)
+	c := new(config)
 	c.m = m
 	c.f = "config"
 
@@ -90,14 +70,14 @@ func NewConfig() (*fileConfig, error) {
 	return c, nil
 }
 
-func (c *fileConfig) HasConfigFile() bool {
+func (c *config) HasConfigFile() bool {
 	f, _ := os.Stat(c.Path())
 	return f != nil
 }
 
-func (c *fileConfig) Path() string { return path.Join(c.h, c.f) }
+func (c *config) Path() string { return path.Join(c.h, c.f) }
 
-func (c *fileConfig) HasKey(key string) bool {
+func (c *config) HasKey(key string) bool {
 	for _, v := range c.Keys() {
 		if v == key {
 			return true
@@ -107,7 +87,7 @@ func (c *fileConfig) HasKey(key string) bool {
 	return false
 }
 
-func (c *fileConfig) Keys() []string {
+func (c *config) Keys() []string {
 	keys := make([]string, len(c.m))
 
 	i := 0
@@ -119,7 +99,7 @@ func (c *fileConfig) Keys() []string {
 	return keys
 }
 
-func (c *fileConfig) Values() []string {
+func (c *config) Values() []string {
 	values := make([]string, len(c.f))
 
 	i := 0
@@ -131,7 +111,7 @@ func (c *fileConfig) Values() []string {
 	return values
 }
 
-func (c *fileConfig) Get(key string) string {
+func (c *config) Get(key string) string {
 	v, ok := c.m[key]
 
 	if !ok {
@@ -141,7 +121,7 @@ func (c *fileConfig) Get(key string) string {
 	return strings.Trim(v, "\"")
 }
 
-func (c *fileConfig) Raw() []string {
+func (c *config) Raw() []string {
 	r := make([]string, len(c.m))
 
 	for i, k := range c.Keys() {
@@ -152,9 +132,9 @@ func (c *fileConfig) Raw() []string {
 	return r
 }
 
-func (c *fileConfig) Set(key, value string) { c.m[key] = value }
+func (c *config) Set(key, value string) { c.m[key] = value }
 
-func (c *fileConfig) Save() error {
+func (c *config) Save() error {
 	err := os.Truncate(c.Path(), 0)
 
 	if err != nil {
@@ -175,7 +155,7 @@ func (c *fileConfig) Save() error {
 	return nil
 }
 
-func (c *fileConfig) Load() {
+func (c *config) Load() {
 	r, _ := os.Open(c.Path())
 
 	defer r.Close()
@@ -183,7 +163,7 @@ func (c *fileConfig) Load() {
 	c.parse(r)
 }
 
-func (c *fileConfig) Read() error {
+func (c *config) Read() error {
 	r, err := os.Open(c.Path())
 
 	if err != nil {
@@ -197,7 +177,7 @@ func (c *fileConfig) Read() error {
 	return nil
 }
 
-func (c *fileConfig) parse(r io.Reader) {
+func (c *config) parse(r io.Reader) {
 	s := bufio.NewScanner(r)
 	c.m = make(map[string]string)
 
@@ -213,11 +193,11 @@ func (c *fileConfig) parse(r io.Reader) {
 	}
 }
 
-func (c *fileConfig) All() string { return strings.Join(c.Raw(), "\n") }
+func (c *config) All() string { return strings.Join(c.Raw(), "\n") }
 
-func (c *fileConfig) Home() string { return c.h }
+func (c *config) Home() string { return c.h }
 
-func (c *fileConfig) Create() error {
+func (c *config) Create() error {
 	defaults, err := c.Default()
 
 	if err != nil {
@@ -231,7 +211,7 @@ func (c *fileConfig) Create() error {
 	return t.Execute(f, defaults)
 }
 
-func (c *fileConfig) Default() (defaultConfig, error) {
+func (c *config) Default() (defaultConfig, error) {
 	e := os.Getenv("EDITOR")
 	s := path.Join(c.Home(), "scripts")
 
@@ -246,7 +226,7 @@ func (c *fileConfig) Default() (defaultConfig, error) {
 	}, nil
 }
 
-func (c *fileConfig) Template() string {
+func (c *config) Template() string {
 	return `editor={{.Editor}}
 projects={{.Projects}}
 scripts={{.Scripts}}
