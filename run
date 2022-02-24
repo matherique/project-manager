@@ -1,7 +1,0 @@
-#!/bin/bash
-
-go build ./cmd/project
-
-./project $@
-
-rm project
