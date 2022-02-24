@@ -16,20 +16,18 @@ type Project interface {
 }
 
 type project struct {
-	c *config.FileConfig
+	c config.Config
 }
 
-func NewProject(c config.FileConfig) *project {
+func NewProject(c config.Config) *project {
 	p := new(project)
-	p.config = c
+	p.c = c
 
 	return p
 }
 
 func (p project) Exists(name string) bool {
-	files := All(c)
-
-	for _, f := range files {
+	for _, f := range p.All() {
 		if f == name {
 			return true
 		}
@@ -39,10 +37,10 @@ func (p project) Exists(name string) bool {
 }
 
 func (p project) All() []string {
-	c.Load()
+	p.c.Load()
 	var fnames []string
 
-	s := c.Get("scripts")
+	s := p.c.Get("scripts")
 
 	files, err := os.ReadDir(s)
 
@@ -58,15 +56,15 @@ func (p project) All() []string {
 }
 
 func (p project) Path(name string) string {
-	return path.Join(c.Get("scripts"), name)
+	return path.Join(p.c.Get("scripts"), name)
 }
 
 func (p project) Remove(name string) error {
-	c.Load()
+	p.c.Load()
 
-	if !Exists(c, name) {
+	if !p.Exists(name) {
 		return fmt.Errorf("project not found")
 	}
 
-	return os.Remove(Path(c, name))
+	return os.Remove(p.Path(name))
 }

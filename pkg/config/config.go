@@ -12,7 +12,7 @@ import (
 	"text/template"
 )
 
-type FileConfig interface {
+type Config interface {
 	Get(key string) string
 	Set(key, value string)
 	Save() error
