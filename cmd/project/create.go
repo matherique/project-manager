@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/matherique/project-manager/internal/cmd"
-	fc "github.com/matherique/project-manager/internal/file_config"
 	"github.com/matherique/project-manager/internal/project"
-	"github.com/matherique/project-manager/internal/utils"
+	"github.com/matherique/project-manager/pkg/cmd"
+	"github.com/matherique/project-manager/pkg/config"
+	"github.com/matherique/project-manager/pkg/utils"
 )
 
 const tpl = `#!/bin/bash
@@ -50,32 +50,27 @@ Usage: project create [name]
 Create new project script
 `
 
-func cmd_create(a []string, c fc.FileConfig) error {
+func cmd_create(args []string, c config.Config, p project.Project) error {
 	c.Load()
 
-	if len(a) == 0 {
+	if len(args) == 0 {
 		return fmt.Errorf("missing project name")
 	}
 
-	name := a[0]
+	name := args[0]
 
-	if project.Exists(c, name) {
+	if p.Exists(name) {
 		return fmt.Errorf("a project with this name already exists")
 	}
 
-	fp := project.Path(c, name)
+	fp := p.Path(name)
 
-	err := utils.CreateFile(fp, tpl)
-
-	if err != nil {
+	if err := utils.CreateFile(fp, tpl); err != nil {
 		return err
 	}
 
-	err = cmd.Exec(c.Get("editor"), fp)
-
-	if err != nil {
-		project.Remove(c, name)
-		return err
+	if err := cmd.Exec(c.Get("editor"), fp); err != nil {
+		return p.Remove(name)
 	}
 
 	return nil

@@ -5,13 +5,29 @@ import (
 	"os"
 	"path"
 
-	fc "github.com/matherique/project-manager/internal/file_config"
+	"github.com/matherique/project-manager/pkg/config"
 )
 
-func Exists(c fc.FileConfig, name string) bool {
-	files := All(c)
+type Project interface {
+	Exists(name string) bool
+	All() []string
+	Path(name string) string
+	Remove(name string) error
+}
 
-	for _, f := range files {
+type project struct {
+	c config.Config
+}
+
+func NewProject(c config.Config) *project {
+	p := new(project)
+	p.c = c
+
+	return p
+}
+
+func (p project) Exists(name string) bool {
+	for _, f := range p.All() {
 		if f == name {
 			return true
 		}
@@ -20,11 +36,11 @@ func Exists(c fc.FileConfig, name string) bool {
 	return false
 }
 
-func All(c fc.FileConfig) []string {
-	c.Load()
+func (p project) All() []string {
+	p.c.Load()
 	var fnames []string
 
-	s := c.Get("scripts")
+	s := p.c.Get("scripts")
 
 	files, err := os.ReadDir(s)
 
@@ -39,22 +55,16 @@ func All(c fc.FileConfig) []string {
 	return fnames
 }
 
-func Path(c fc.FileConfig, name string) string {
-	return path.Join(c.Get("scripts"), name)
+func (p project) Path(name string) string {
+	return path.Join(p.c.Get("scripts"), name)
 }
 
-func Remove(c fc.FileConfig, name string) error {
-	c.Load()
+func (p project) Remove(name string) error {
+	p.c.Load()
 
-	if !Exists(c, name) {
+	if !p.Exists(name) {
 		return fmt.Errorf("project not found")
 	}
 
-	err := os.Remove(Path(c, name))
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return os.Remove(p.Path(name))
 }

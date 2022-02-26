@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
-	fc "github.com/matherique/project-manager/internal/file_config"
 	"github.com/matherique/project-manager/internal/project"
+	"github.com/matherique/project-manager/pkg/config"
 )
 
 const doc_list string = `
@@ -15,16 +14,14 @@ Usage: project list|ls
 List all available projects
 `
 
-func cmd_list(args []string, c fc.FileConfig) error {
+func cmd_list(args []string, c config.Config, p project.Project) (string, error) {
 	c.Load()
 
-	all := project.All(c)
+	projects := p.All()
 
-	if len(all) == 0 {
-		return fmt.Errorf("no project found")
+	if len(projects) == 0 {
+		return "", fmt.Errorf("no project found")
 	}
 
-	fmt.Fprintln(os.Stdout, strings.Join(all, "\n"))
-
-	return nil
+	return strings.Join(projects, "\n"), nil
 }

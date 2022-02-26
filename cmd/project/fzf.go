@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"strings"
 
-	fc "github.com/matherique/project-manager/internal/file_config"
 	"github.com/matherique/project-manager/internal/project"
+	"github.com/matherique/project-manager/pkg/config"
 )
 
 const doc_fzf string = `
@@ -16,24 +16,20 @@ Usage: project fzf
 List all project with fzf, and open if selected
 `
 
-func cmd_fzf(_ []string, c fc.FileConfig) error {
-	projects := project.All(c)
+func cmd_fzf(_ []string, c config.Config, p project.Project) error {
+	projects := p.All()
 
 	if len(projects) == 0 {
 		return fmt.Errorf("no project found")
 	}
 
-	p, err := exec_fzf(projects)
+	selected, err := exec_fzf(projects)
 
 	if err != nil {
 		return err
 	}
 
-	if p == "" {
-		return nil
-	}
-
-	return cmd_open([]string{p}, c)
+	return cmd_open([]string{selected}, c, p)
 }
 
 func exec_fzf(source []string) (string, error) {

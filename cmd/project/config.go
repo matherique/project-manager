@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/matherique/project-manager/internal/cmd"
-	fc "github.com/matherique/project-manager/internal/file_config"
+	"github.com/matherique/project-manager/pkg/cmd"
+	"github.com/matherique/project-manager/pkg/config"
 )
 
 const doc_config string = `
@@ -21,57 +20,45 @@ Configurations avaliable:
 Set or get configuration value
 `
 
-func cmd_config(a []string, c fc.FileConfig) error {
+func cmd_config(args []string, c config.Config) (string, error) {
 	c.Load()
 
-	if len(a) == 0 {
-		fmt.Fprintln(os.Stdout, GetAll(c))
-		return nil
+	argsize := len(args)
+
+	// project config
+	if argsize == 0 {
+		return c.All(), nil
 	}
 
-	switch len(a) {
+	// project config edit
+	if args[0] == "edit" {
+		return "", edit(c)
+	}
+
+	// project config invalid_key
+	if !c.HasKey(args[0]) {
+		return "", fmt.Errorf("key not found")
+	}
+
+	switch argsize {
 	case 1:
-		if a[0] == "edit" {
-			return Edit(c)
-		}
-		return GetKey(c, a[0])
+		// project config key
+		return c.Get(args[0]), nil
 	case 2:
-		return SetValue(c, a[0], a[1])
+		// project config key value
+		c.Set(args[0], args[1])
+		return "", c.Save()
 	}
 
-	return nil
+	return "", nil
 }
 
-func GetAll(c fc.FileConfig) string {
-	return c.All()
-}
+func edit(c config.Config) error {
+	file := c.Path()
 
-func SetValue(c fc.FileConfig, key, value string) error {
-	if !c.HasKey(key) {
-		return fmt.Errorf("key not found")
-	}
-
-	c.Set(key, value)
-
-	return c.Save()
-}
-
-func GetKey(c fc.FileConfig, key string) error {
-	if !c.HasKey(key) {
-		return fmt.Errorf("key not found")
-	}
-
-	fmt.Fprintln(os.Stdout, c.Get(key))
-
-	return nil
-}
-
-func Edit(c fc.FileConfig) error {
-	cf := c.Path()
-
-	if cf == "" {
+	if file == "" {
 		return fmt.Errorf("config file not found")
 	}
 
-	return cmd.Exec(c.Get("editor"), cf)
+	return cmd.Exec(c.Get("editor"), file)
 }
