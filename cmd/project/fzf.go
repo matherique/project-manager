@@ -29,7 +29,7 @@ func cmd_fzf(_ []string, c config.Config, p project.Project) error {
 		return err
 	}
 
-	return cmd_open([]string{selected}, c)
+	return cmd_open([]string{selected}, c, p)
 }
 
 func exec_fzf(source []string) (string, error) {
