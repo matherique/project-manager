@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/matherique/project-manager/pkg/cmd"
-	fc "github.com/matherique/project-manager/pkg/config"
 	"github.com/matherique/project-manager/internal/project"
+	"github.com/matherique/project-manager/pkg/cmd"
+	"github.com/matherique/project-manager/pkg/config"
 )
 
 const doc_edit string = `
@@ -14,29 +14,24 @@ Usage: project edit [name]
 Open project script file to edit
 `
 
-func cmd_edit(args []string, c fc.FileConfig) error {
+func cmd_edit(args []string, c config.Config, p project.Project) error {
 	if len(args) == 0 {
 		return fmt.Errorf("missing project name")
 	}
 
 	c.Load()
 
-	pl := project.All(c)
+	projects := p.All()
 
-	if len(pl) == 0 {
+	if len(projects) == 0 {
 		return fmt.Errorf("no project created")
 	}
 
-	var p string
-	for _, v := range pl {
-		if args[0] == v {
-			p = v
-		}
+	name := args[0]
+
+	if !p.Exists(name) {
+		return fmt.Errorf("no project found with this name: %s", name)
 	}
 
-	if p == "" {
-		return fmt.Errorf("no project found with this name: %s", args[0])
-	}
-
-	return cmd.Exec(c.Get("editor"), project.Path(c, p))
+	return cmd.Exec(c.Get("editor"), p.Path(name))
 }
