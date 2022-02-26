@@ -23,9 +23,9 @@ func cmd_open(args []string, c config.Config, p project.Project) error {
 
 	name := args[0]
 
-	if !project.Exists(name) {
+	if !p.Exists(name) {
 		return fmt.Errorf("project not found")
 	}
 
-	return cmd.Exec(p.Path(n), "up")
+	return cmd.Exec(p.Path(name), "up")
 }
